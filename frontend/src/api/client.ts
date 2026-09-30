@@ -54,7 +54,7 @@ async function request<T>(path: string, init?: RequestInit & { idempotencyKey?: 
 export const api = {
   health: () => request<{ status: string; is_demo: boolean }>("/api/health"),
   questionnaire: () => request<QuestionnaireConfig>("/api/config/questionnaire"),
-  clinic: () => request<{ timezone: string; therapist_id: string; is_demo: boolean; consent: { processing_copy: string; processing_text_version: string; transfer_text_version: string } }>("/api/config/clinic"),
+  clinic: () => request<{ timezone: string; therapist_id: string; is_demo: boolean; consent: { processing_copy: string; processing_copy_kz?: string; processing_text_version: string; transfer_text_version: string } }>("/api/config/clinic"),
   overviewCards: () => request<{ cards: OverviewCard[]; is_demo: boolean }>("/api/content/overview-cards"),
   preview: (body: QuestionnaireSubmission) => request<Preview>("/api/preview", { method: "POST", body: JSON.stringify(body) }),
   createCase: (body: Record<string, unknown>) =>
@@ -127,6 +127,7 @@ export const api = {
       doctor_note: string | null;
       package_id: string | null;
       program_name: string | null;
+      program_name_kz: string | null;
       price_minor: number | null;
       price_old_minor: number | null;
       consultation_reason: string;

@@ -132,9 +132,9 @@ function LoginDialog({ redirectTo }: { redirectTo: string | null }) {
     } catch (err) {
       if (err instanceof ApiClientError) {
         if (err.code === "phone_invalid") setError(copy.errPhone);
-        else if (err.code === "otp_cooldown") setError(err.message || copy.errCooldown);
-        else if (err.code === "otp_limit") setError(err.message || copy.errLimit);
-        else setError(err.message || copy.errGeneric);
+        else if (err.code === "otp_cooldown") setError(lang === "kz" ? copy.errCooldown : err.message || copy.errCooldown);
+        else if (err.code === "otp_limit") setError(lang === "kz" ? copy.errLimit : err.message || copy.errLimit);
+        else setError(lang === "kz" ? copy.errGeneric : err.message || copy.errGeneric);
       } else {
         setError(copy.errGeneric);
       }
@@ -185,7 +185,7 @@ function LoginDialog({ redirectTo }: { redirectTo: string | null }) {
           setError(copy.errPhone);
           setStep("phone");
         } else {
-          setError(err.message || copy.errGeneric);
+          setError(lang === "kz" ? copy.errGeneric : err.message || copy.errGeneric);
         }
       } else {
         setError(copy.errGeneric);

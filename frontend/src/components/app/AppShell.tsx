@@ -18,6 +18,12 @@ export type ShellTheme = "light" | "dark";
 export type ShellNavItem = { to: string; label: string; icon: ReactNode; badge?: string | number; end?: boolean };
 export type ShellRecentItem = { key: string; to: string; label: string; meta?: string; active?: boolean; dot?: "green" | "amber" | "grey" };
 
+/** Chrome aria-labels for the shell. Staff area is Russian-only, so `ru` is the default. */
+const SHELL_ARIA = {
+  ru: { closeMenu: "Закрыть меню", sections: "Разделы", openPanel: "Открыть панель", menu: "Меню", close: "Закрыть" },
+  kz: { closeMenu: "Мәзірді жабу", sections: "Бөлімдер", openPanel: "Панельді ашу", menu: "Мәзір", close: "Жабу" },
+} as const;
+
 export const serifHeading = "font-['Iowan_Old_Style','Palatino_Linotype',Georgia,ui-serif,serif] tracking-[-0.01em]";
 
 /** Theme context so descendant helpers (cards, headers) can pick the right palette. */
@@ -35,6 +41,7 @@ export function AppShell({
   children,
   wide = false,
   theme = "light",
+  lang = "ru",
 }: {
   primaryAction?: ReactNode;
   nav: ShellNavItem[];
@@ -44,11 +51,13 @@ export function AppShell({
   children: ReactNode;
   wide?: boolean;
   theme?: ShellTheme;
+  lang?: "ru" | "kz";
 }) {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const dark = theme === "dark";
+  const aria = SHELL_ARIA[lang];
 
   useEffect(() => setOpen(false), [location.pathname, location.search]);
 
@@ -67,7 +76,7 @@ export function AppShell({
           className={`grid h-9 w-9 place-items-center rounded-lg lg:hidden ${
             dark ? "text-[#9AABA2] hover:bg-white/[0.06]" : "text-[#52655B] hover:bg-[#03392D]/[0.06]"
           }`}
-          aria-label="Закрыть меню"
+          aria-label={aria.closeMenu}
           onClick={() => setOpen(false)}
         >
           <X className="h-5 w-5" aria-hidden />
@@ -76,7 +85,7 @@ export function AppShell({
 
       {primaryAction ? <div className="px-3 pb-3">{primaryAction}</div> : null}
 
-      <nav className="grid gap-0.5 px-3" aria-label="Разделы">
+      <nav className="grid gap-0.5 px-3" aria-label={aria.sections}>
         {nav.map((item) => (
           <NavLink
             key={item.to}
@@ -180,7 +189,7 @@ export function AppShell({
           <button
             type="button"
             onClick={() => setCollapsed(false)}
-            aria-label="Открыть панель"
+            aria-label={aria.openPanel}
             className={`fixed left-3 top-3 z-30 hidden h-10 w-10 place-items-center rounded-xl border lg:grid ${
               dark
                 ? "border-white/10 bg-[#18201C] text-[#8BC53F]"
@@ -202,7 +211,7 @@ export function AppShell({
             className={`grid h-10 w-10 place-items-center rounded-xl ${
               dark ? "text-[#8BC53F] hover:bg-white/[0.06]" : "text-[#03392D] hover:bg-[#03392D]/[0.06]"
             }`}
-            aria-label="Меню"
+            aria-label={aria.menu}
             onClick={() => setOpen(true)}
           >
             <Menu className="h-5 w-5" aria-hidden />
@@ -213,7 +222,7 @@ export function AppShell({
           <div className="fixed inset-0 z-50 lg:hidden">
             <button
               type="button"
-              aria-label="Закрыть"
+              aria-label={aria.close}
               className={`gc-backdrop absolute inset-0 ${dark ? "bg-black/50" : "bg-[#18342A]/30"}`}
               onClick={() => setOpen(false)}
             />

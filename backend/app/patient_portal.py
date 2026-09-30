@@ -58,7 +58,7 @@ def _catalogue_names() -> dict[str, str]:
     if not path.exists():
         return {}
     data = json.loads(path.read_text(encoding="utf-8"))
-    return {p["package_id"]: p["name"] for p in data.get("packages") or []}
+    return {p["package_id"]: (p["name"], p.get("name_kz")) for p in data.get("packages") or []}
 
 
 def _require_demo() -> None:
@@ -183,7 +183,8 @@ def patient_me(request: Request) -> dict:
                     "stage": projected["stage"],
                     "step_index": STAGE_STEP.get(projected["stage"], 0),
                     "selected_program_id": program_id,
-                    "selected_program_name": names.get(program_id) if program_id else None,
+                    "selected_program_name": (names.get(program_id) or (None, None))[0] if program_id else None,
+                    "selected_program_name_kz": (names.get(program_id) or (None, None))[1] if program_id else None,
                     "consultation_reason": projected["consultation_reason"],
                     "preferred_date": projected["preferred_date"],
                     "booked_starts_at": projected["booked_starts_at"],
@@ -238,6 +239,7 @@ def patient_last_request(request: Request) -> dict:
             "doctor_note": row["doctor_note"],
             "package_id": pkg["package_id"] if pkg else None,
             "program_name": pkg["name"] if pkg else None,
+            "program_name_kz": pkg.get("name_kz") if pkg else None,
             "price_minor": pkg.get("price_minor") if pkg else None,
             "price_old_minor": pkg.get("price_old_minor") if pkg else None,
             "consultation_reason": row["consultation_reason"] or "check_programme",

@@ -8,6 +8,7 @@ import type { Appointment, Slot } from "@/api/types";
 import { adoptPatientSession, usePatient } from "@/app/patientSession";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import { applyDocumentLang, useUiLang } from "@/features/patient-home/welcome";
+import { localizeApiError } from "@/features/patient-home/localize";
 
 import { BOOKING_COPY, type BookingCopy } from "./copy";
 import {
@@ -139,7 +140,7 @@ export function BookingPage() {
         setTimezone(config.timezone || "Asia/Almaty");
       } catch (err) {
         if (cancelled) return;
-        setClinicError(err instanceof Error ? err.message : "Не удалось загрузить клинику");
+        setClinicError(localizeApiError(err, lang, copy.unavailableTitle));
       }
     })();
     return () => {
@@ -199,7 +200,7 @@ export function BookingPage() {
       } catch (err) {
         if (seq !== requestSeq.current) return;
         setSlots([]);
-        setSlotsError(err instanceof Error ? err.message : "Не удалось загрузить слоты");
+        setSlotsError(localizeApiError(err, lang, copy.errGeneric));
       } finally {
         if (seq === requestSeq.current) setSlotsLoading(false);
       }
@@ -246,7 +247,7 @@ export function BookingPage() {
       setTimezone(result.timezone || clinic.timezone || "Asia/Almaty");
     } catch (err) {
       if (seq !== requestSeq.current) return;
-      setSlotsError(err instanceof Error ? err.message : "Не удалось обновить слоты");
+      setSlotsError(localizeApiError(err, lang, copy.errGeneric));
     } finally {
       if (seq === requestSeq.current) setSlotsLoading(false);
     }
@@ -352,7 +353,7 @@ export function BookingPage() {
       } else if (err instanceof ApiClientError && err.status === 422 && err.code === "phone_invalid") {
         setPhoneError(copy.errPhoneInvalid);
       } else {
-        setSubmitError(err instanceof Error ? err.message : copy.errGeneric);
+        setSubmitError(localizeApiError(err, lang, copy.errGeneric));
       }
     } finally {
       submittingRef.current = false;

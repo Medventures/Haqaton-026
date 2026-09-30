@@ -31,6 +31,7 @@ import {
 } from "@/components/app/AppShell";
 import { openLogin } from "@/components/patient/loginSheetStore";
 import { applyDocumentLang, setUiLang, useUiLang, type UiLang } from "@/features/patient-home/welcome";
+import { programName } from "@/features/patient-home/localize";
 
 import { CABINET_COPY, STEPS } from "./copy";
 import { VisitsCalendar } from "./VisitsCalendar";
@@ -145,7 +146,7 @@ export function CabinetPage() {
     .map((c) => ({
       key: c.case_id,
       to: "/cabinet",
-      label: c.selected_program_name ?? copy.programFallback,
+      label: programName(c.selected_program_name, c.selected_program_name_kz, lang) ?? copy.programFallback,
       meta: shortDate(lang, c.booked_starts_at),
       dot: caseDot(c),
       active: current ? c.case_id === current.case_id : false,
@@ -167,7 +168,7 @@ export function CabinetPage() {
             doctor_note: last.doctor_note,
           },
           selected_package_id: last.package_id,
-          program_name: last.program_name,
+          program_name: programName(last.program_name, last.program_name_kz, lang) ?? last.program_name,
           price_minor: last.price_minor,
           price_old_minor: last.price_old_minor,
           currency: "KZT",
@@ -206,7 +207,7 @@ export function CabinetPage() {
   );
 
   return (
-    <AppShell primaryAction={primaryAction} nav={nav} recentTitle={copy.tabVisits} recent={recent} account={account} wide>
+    <AppShell primaryAction={primaryAction} nav={nav} recentTitle={copy.tabVisits} recent={recent} account={account} wide lang={lang}>
       {welcomePhone !== null ? (
         <div className="mb-5 flex items-start gap-3 rounded-2xl border border-[#8BC53F]/40 bg-[#8BC53F]/12 px-4 py-3">
           <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#03392D] text-white">
@@ -437,7 +438,7 @@ function CabinetBody({
       <div className={`${shellCard} mt-4 p-5 md:p-6`}>
         <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#03392D]/55">{copy.program}</p>
         <p className="mt-2 text-[17px] font-semibold leading-snug text-[#10261E]">
-          {current.selected_program_name ?? copy.programUnknown}
+          {programName(current.selected_program_name, current.selected_program_name_kz, lang) ?? copy.programUnknown}
         </p>
         <p className="mt-1 text-[13px] text-[#52655B]">{copy.programNote}</p>
       </div>
@@ -518,7 +519,7 @@ function VisitsTab({
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-[15px] font-semibold text-[#10261E]">{fmt(lang, c.booked_starts_at)}</span>
-                  <span className="block truncate text-[13px] text-[#52655B]">{c.selected_program_name ?? copy.programFallback}</span>
+                  <span className="block truncate text-[13px] text-[#52655B]">{programName(c.selected_program_name, c.selected_program_name_kz, lang) ?? copy.programFallback}</span>
                 </span>
                 {c.appointment_status ? (
                   <StatusChip tone={c.appointment_status === "clinic_request_pending" ? "amber" : "green"}>

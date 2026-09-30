@@ -2,9 +2,12 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { LangSegment } from "@/components/patient/LangSegment";
 import { ProfileButton } from "@/components/patient/ProfileButton";
+import { useUiLang } from "@/features/patient-home/welcome";
 
 /** Fixed glass top bar shared by the patient screens: logo · language · profile. */
 export function PatientTopBar({ left, center }: { left?: ReactNode; center?: ReactNode }) {
+  const lang = useUiLang();
+  const homeAria = lang === "kz" ? "Green Clinic — басты бетке" : "Green Clinic — на главную";
   return (
     <header className="fixed inset-x-0 top-0 z-30 px-4 pt-4 md:px-8 md:pt-6">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-full border border-white/60 bg-white/55 pl-3 pr-2 shadow-[0_1px_2px_rgba(3,57,45,.05),0_8px_24px_rgba(3,57,45,.06)] backdrop-blur-xl md:pl-5">
@@ -13,7 +16,7 @@ export function PatientTopBar({ left, center }: { left?: ReactNode; center?: Rea
           <Link
             to="/"
             className="rounded-full px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#03392D]"
-            aria-label="Green Clinic — на главную"
+            aria-label={homeAria}
           >
             <img src="/prime-logo.svg" alt="PRIME Green Clinic" className="h-7 w-auto md:h-8" />
           </Link>

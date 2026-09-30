@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PatientCaseSummary } from "@/api/types";
 import type { UiLang } from "@/features/patient-home/welcome";
+import { programName } from "@/features/patient-home/localize";
 
 /*
  * Patient appointment calendar (light theme), modelled on the clinic week calendar:
@@ -13,6 +14,23 @@ const WEEKDAYS: Record<UiLang, string[]> = {
   ru: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
   kz: ["Дс", "Сс", "Ср", "Бс", "Жм", "Сн", "Жс"],
 };
+
+const CAL_COPY = {
+  ru: {
+    prevMonth: "Предыдущий месяц",
+    nextMonth: "Следующий месяц",
+    dayVisits: (n: number) => `, приёмов: ${n}`,
+    noVisits: "В этот день приёмов нет",
+    allVisits: "Все приёмы",
+  },
+  kz: {
+    prevMonth: "Алдыңғы ай",
+    nextMonth: "Келесі ай",
+    dayVisits: (n: number) => `, қабылдаулар: ${n}`,
+    noVisits: "Бұл күні қабылдау жоқ",
+    allVisits: "Барлық қабылдаулар",
+  },
+} as const;
 
 function localDay(iso: string): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(iso));
@@ -33,6 +51,7 @@ export function VisitsCalendar({
   programFallback: string;
   statusLabel: (status: string | null) => string | null;
 }) {
+  const cal = CAL_COPY[lang];
   const visits = useMemo(
     () =>
       cases
@@ -73,10 +92,10 @@ export function VisitsCalendar({
         <div className="mb-4 flex items-center justify-between">
           <p className="text-[16px] font-semibold capitalize text-[#10261E]">{title}</p>
           <div className="flex gap-1">
-            <button type="button" aria-label="Предыдущий месяц" onClick={() => shift(-1)} className="grid h-9 w-9 place-items-center rounded-full text-[#03392D] transition hover:bg-[#03392D]/[0.06]">
+            <button type="button" aria-label={cal.prevMonth} onClick={() => shift(-1)} className="grid h-9 w-9 place-items-center rounded-full text-[#03392D] transition hover:bg-[#03392D]/[0.06]">
               <ChevronLeft className="h-4 w-4" aria-hidden />
             </button>
-            <button type="button" aria-label="Следующий месяц" onClick={() => shift(1)} className="grid h-9 w-9 place-items-center rounded-full text-[#03392D] transition hover:bg-[#03392D]/[0.06]">
+            <button type="button" aria-label={cal.nextMonth} onClick={() => shift(1)} className="grid h-9 w-9 place-items-center rounded-full text-[#03392D] transition hover:bg-[#03392D]/[0.06]">
               <ChevronRight className="h-4 w-4" aria-hidden />
             </button>
           </div>
@@ -98,7 +117,7 @@ export function VisitsCalendar({
                 type="button"
                 onClick={() => setSelected(key)}
                 aria-pressed={on}
-                aria-label={`${Number(key.slice(8))}${items.length ? `, приёмов: ${items.length}` : ""}`}
+                aria-label={`${Number(key.slice(8))}${items.length ? cal.dayVisits(items.length) : ""}`}
                 className={`relative flex aspect-square flex-col items-center justify-center rounded-xl text-[14px] tabular-nums transition ${
                   on
                     ? "bg-[#03392D] font-semibold text-white"
@@ -124,7 +143,7 @@ export function VisitsCalendar({
             : "—"}
         </p>
         {agenda.length === 0 ? (
-          <p className="mt-3 text-[14px] text-[#52655B]">{lang === "kz" ? "Бұл күні қабылдау жоқ" : "В этот день приёмов нет"}</p>
+          <p className="mt-3 text-[14px] text-[#52655B]">{cal.noVisits}</p>
         ) : (
           <ul className="mt-3 grid gap-2">
             {agenda.map((v) => {
@@ -132,7 +151,7 @@ export function VisitsCalendar({
               return (
                 <li key={v.case_id} className={`rounded-xl border-l-4 bg-[#F4F8F5] px-3 py-2.5 ${pending ? "border-[#d98e04]" : "border-[#5a9a1f]"}`}>
                   <p className="text-[15px] font-semibold tabular-nums text-[#10261E]">{timeOf(v.booked_starts_at!)}</p>
-                  <p className="truncate text-[13px] text-[#18342A]">{v.selected_program_name ?? programFallback}</p>
+                  <p className="truncate text-[13px] text-[#18342A]">{programName(v.selected_program_name, v.selected_program_name_kz, lang) ?? programFallback}</p>
                   <p className="text-[12px] text-[#52655B]">{statusLabel(v.appointment_status)}</p>
                 </li>
               );
@@ -141,7 +160,7 @@ export function VisitsCalendar({
         )}
         {visits.length ? (
           <div className="mt-5 border-t border-[#03392D]/[0.07] pt-4">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#52655B]">{lang === "kz" ? "Барлық қабылдаулар" : "Все приёмы"}</p>
+            <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#52655B]">{cal.allVisits}</p>
             <ul className="mt-2 grid gap-1">
               {visits.map((v) => (
                 <li key={v.case_id}>
@@ -153,9 +172,9 @@ export function VisitsCalendar({
                     }}
                     className="flex w-full items-center justify-between gap-3 rounded-lg px-2 py-1.5 text-left text-[13px] transition hover:bg-[#03392D]/[0.05]"
                   >
-                    <span className="truncate text-[#18342A]">{v.selected_program_name ?? programFallback}</span>
+                    <span className="truncate text-[#18342A]">{programName(v.selected_program_name, v.selected_program_name_kz, lang) ?? programFallback}</span>
                     <span className="shrink-0 tabular-nums text-[#52655B]">
-                      {new Intl.DateTimeFormat("ru-RU", { day: "2-digit", month: "2-digit", timeZone: TZ }).format(new Date(v.booked_starts_at!))} · {timeOf(v.booked_starts_at!)}
+                      {new Intl.DateTimeFormat(lang === "kz" ? "kk-KZ" : "ru-RU", { day: "2-digit", month: "2-digit", timeZone: TZ }).format(new Date(v.booked_starts_at!))} · {timeOf(v.booked_starts_at!)}
                     </span>
                   </button>
                 </li>

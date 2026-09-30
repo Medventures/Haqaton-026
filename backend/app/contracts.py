@@ -115,6 +115,7 @@ class OfferTier(BaseModel):
     slot: Literal["optimal", "maximum"]
     package_id: str
     name: str
+    name_kz: str | None = None
     variant: Literal["standard", "adapted"] = "standard"
     block_ids: list[str]
     extra_block_ids: list[str] = Field(default_factory=list)
@@ -126,7 +127,7 @@ class OfferTier(BaseModel):
     adaptation_ru: list[str] = Field(default_factory=list)
     adaptation_kz: list[str] = Field(default_factory=list)
     # Full composition from the clinic page, one line per block (for "Подробнее о составе").
-    details: list[dict[str, str]] = Field(default_factory=list)
+    details: list[dict[str, str | None]] = Field(default_factory=list)
     # Previous price only if the clinic publishes a real promo; never computed.
     price_old_minor: int | None = None
 

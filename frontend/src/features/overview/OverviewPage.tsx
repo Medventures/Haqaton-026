@@ -34,8 +34,8 @@ const COPY = {
     handoffSub: "Обычный подбор программ для этого исхода не показываем.",
     home: "На главную",
     errorTitle: "Не удалось подготовить отчёт",
-    retry: "Попробовать ещё раз",
-    editAnswers: "Изменить ответы",
+    errorBody: "Что-то пошло не так. Попробуйте ещё раз.",
+    retry: "Попробовать ещё раз",    editAnswers: "Изменить ответы",
     noFlowTitle: "Отчёт недоступен",
     noFlowSub: "Подбор запускается после анкеты. Ответы не восстанавливаются из адреса страницы.",
     toIntake: "К анкете",
@@ -53,6 +53,7 @@ const COPY = {
     handoffSub: "Бұл нәтиже үшін әдеттегі бағдарлама таңдауы көрсетілмейді.",
     home: "Басты бетке",
     errorTitle: "Есепті дайындау мүмкін болмады",
+    errorBody: "Бірдеңе дұрыс болмады. Қайталап көріңіз.",
     retry: "Қайта көру",
     editAnswers: "Жауаптарды өзгерту",
     noFlowTitle: "Есеп қолжетімсіз",
@@ -81,7 +82,12 @@ export function OverviewPage() {
 
   const matched = !!revisionId && !!flow && flow.revisionId === revisionId ? flow : null;
   const preview = matched?.status === "ready" ? matched.preview : null;
-  const previewError = matched?.status === "error" ? matched.errorMessage : null;
+  const previewError =
+    matched?.status === "error"
+      ? lang === "kz"
+        ? copy.errorBody
+        : matched.errorMessage
+      : null;
   const handoff = preview ? isHandoffClass(preview.workflow_class) : false;
 
   useEffect(() => {

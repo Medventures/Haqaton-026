@@ -106,6 +106,7 @@ def _tier(
         slot=slot,  # type: ignore[arg-type]
         package_id=package["package_id"],
         name=package["name"],
+        name_kz=package.get("name_kz"),
         variant=variant,  # type: ignore[arg-type]
         block_ids=blocks,
         extra_block_ids=extra,
@@ -117,7 +118,12 @@ def _tier(
         adaptation_ru=[a[0] for a in adaptation or []],
         adaptation_kz=[a[1] for a in adaptation or []],
         details=[
-            {"id": b["id"], "label": b.get("label") or b["id"]}
+            {
+                "id": b["id"],
+                "label": b.get("label") or b["id"],
+                # Full clinic wording exists only in Russian; Kazakh gets the block title.
+                "label_kz": (_data()["block_labels"].get(b["id"]) or {}).get("kz"),
+            }
             for b in package.get("blocks") or []
             if isinstance(b, dict) and b.get("id")
         ],

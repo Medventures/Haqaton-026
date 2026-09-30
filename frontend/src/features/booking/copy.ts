@@ -79,7 +79,7 @@ export const BOOKING_COPY = {
     therapistRole: "Алғашқы қабылдау · 30 мин",
     programFallback: "Чек-ап",
     pickDay: "Күнді таңдаңыз",
-    weekdays: ["Дс", "Сс", "Ср", "Бс", "Жм", "Сб", "Жс"],
+    weekdays: ["Дс", "Сс", "Ср", "Бс", "Жм", "Сн", "Жс"],
     prevMonth: "Алдыңғы ай",
     nextMonth: "Келесі ай",
     time: "Уақыт",

@@ -67,6 +67,7 @@ export type OfferTier = {
   slot: "optimal" | "maximum";
   package_id: string;
   name: string;
+  name_kz: string | null;
   variant: "standard" | "adapted";
   block_ids: string[];
   extra_block_ids: string[];
@@ -77,7 +78,7 @@ export type OfferTier = {
   note_kz: string | null;
   adaptation_ru: string[];
   adaptation_kz: string[];
-  details: Array<{ id: string; label: string }>;
+  details: Array<{ id: string; label: string; label_kz: string | null }>;
   price_old_minor: number | null;
 };
 
@@ -238,6 +239,7 @@ export type PatientCaseSummary = {
   step_index: number;
   selected_program_id: string | null;
   selected_program_name: string | null;
+  selected_program_name_kz: string | null;
   consultation_reason: string | null;
   preferred_date: string | null;
   booked_starts_at: string | null;

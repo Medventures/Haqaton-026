@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { AlertTriangle, ArrowRight, Baby, Check, ChevronLeft, PencilLine, Phone, ShieldCheck } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { api, ApiClientError } from "@/api/client";
+import { api } from "@/api/client";
 import type { QuestionDef, QuestionnaireConfig } from "@/api/types";
 import { track } from "@/analytics/tracker";
 import { btnPrimary, btnSecondary, glass } from "@/components/patient/buttons";
@@ -22,6 +22,7 @@ import {
 } from "@/features/intake/answersLogic";
 import { startPreviewFlow, wipeMedicalFlow } from "@/features/intake/flowState";
 import { applyDocumentLang, useUiLang, welcomeCopy, type UiLang } from "@/features/patient-home/welcome";
+import { localizeApiError } from "@/features/patient-home/localize";
 import { createId } from "@/lib/id";
 
 /*
@@ -139,7 +140,7 @@ const QUIZ_COPY = {
       {
         tel: "112",
         title: "112 — Бірыңғай құтқару қызметі",
-        note: "103-ке дозвон болмаса; ұялы телефоннан балансыз жұмыс істейді.",
+        note: "103-ке хабарласа алмасаңыз; ұялы телефоннан балансыз жұмыс істейді.",
       },
       {
         tel: "+77470942621",
@@ -194,7 +195,7 @@ export function IntakePage() {
 
   const [rawConfig, setConfig] = useState<QuestionnaireConfig | null>(null);
   const config = useMemo(() => (rawConfig ? localizeConfig(rawConfig, lang) : null), [rawConfig, lang]);
-  const [consentCopy, setConsentCopy] = useState("");
+  const [consentCopy, setConsentCopy] = useState<{ ru: string; kz: string | null }>({ ru: "", kz: null });
   const [consentVersion, setConsentVersion] = useState("");
   const [loadError, setLoadError] = useState<string | null>(null);
   const [answers, setAnswersState] = useState<Answers>(draft.answers);
@@ -217,12 +218,12 @@ export function IntakePage() {
       .then(([questionnaire, clinic]) => {
         if (cancelled) return;
         setConfig(questionnaire);
-        setConsentCopy(clinic.consent.processing_copy);
+        setConsentCopy({ ru: clinic.consent.processing_copy, kz: clinic.consent.processing_copy_kz ?? null });
         setConsentVersion(clinic.consent.processing_text_version);
       })
       .catch((err: unknown) => {
         if (cancelled) return;
-        setLoadError(err instanceof ApiClientError ? err.message : "Не удалось загрузить анкету");
+        setLoadError(localizeApiError(err, lang, copy.unavailable));
         track("technical_error", { code: "intake_config_load" });
       });
     return () => {
@@ -485,7 +486,7 @@ export function IntakePage() {
                   {copy.consentTitle}
                 </h1>
               </div>
-              <p className={`${glass} rounded-3xl p-5 text-[16px] leading-relaxed text-[#18342A] md:p-6`}>{consentCopy}</p>
+              <p className={`${glass} rounded-3xl p-5 text-[16px] leading-relaxed text-[#18342A] md:p-6`}>{lang === "kz" ? consentCopy.kz ?? consentCopy.ru : consentCopy.ru}</p>
               {declined ? (
                 <p role="status" className="rounded-2xl bg-[#fff4e5] px-4 py-3 text-[15px] text-[#7a4a00]">
                   {copy.declined}

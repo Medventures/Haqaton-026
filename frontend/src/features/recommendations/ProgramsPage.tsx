@@ -8,6 +8,7 @@ import { btnPrimary, btnSecondary, glass } from "@/components/patient/buttons";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import { getFlow, type BookingLocationState, type ProgramsLocationState } from "@/features/intake/flowState";
 import { useUiLang, type UiLang } from "@/features/patient-home/welcome";
+import { programName } from "@/features/patient-home/localize";
 import { consideredChips } from "@/features/recommendations/planLabels";
 import "@/features/recommendations/programs.css";
 
@@ -220,7 +221,7 @@ export function ProgramsPage() {
       revision_id: preview!.revision_id,
       selected_package_id: tier.package_id,
       consultation_reason: reason,
-      program_name: tier.name,
+      program_name: programName(tier.name, tier.name_kz, lang) ?? tier.name,
       price_minor: tier.price_minor,
       price_old_minor: tier.price_old_minor,
       currency: tier.currency,
@@ -500,7 +501,7 @@ function TierCard({
         <span className={`text-[13px] font-semibold uppercase tracking-[0.08em] ${dark ? "text-white/60" : "text-[#03392D]/60"}`}>
           {slot === "optimal" ? copy.optimal : copy.maximum}
         </span>
-        <h3 className="text-[22px] font-bold leading-tight tracking-[-0.02em]">{tier.name}</h3>
+        <h3 className="text-[22px] font-bold leading-tight tracking-[-0.02em]">{programName(tier.name, tier.name_kz, lang) ?? tier.name}</h3>
         <span className={`text-[14px] ${dark ? "text-white/70" : "text-[#52655B]"}`}>
           {copy.blocksCount(tier.block_ids.length)}
         </span>
@@ -616,7 +617,7 @@ function TierCard({
                     >
                       <Check className="h-2.5 w-2.5" strokeWidth={3} aria-hidden />
                     </span>
-                    <span className={dark ? "text-white/85" : "text-[#3a4d44]"}>{item.label}</span>
+                    <span className={dark ? "text-white/85" : "text-[#3a4d44]"}>{lang === "kz" ? item.label_kz ?? item.label : item.label}</span>
                   </li>
                 ))}
               </ul>

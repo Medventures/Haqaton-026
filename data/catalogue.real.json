@@ -72,7 +72,8 @@
       ],
       "missing_positions": [],
       "unknown_positions": [],
-      "price_old_minor": null
+      "price_old_minor": null,
+      "name_kz": "Чек-ап «40 жасқа дейінгі әйелдерге арналған базалық»"
     },
     {
       "package_id": "m-basic-u40",
@@ -140,7 +141,8 @@
       ],
       "missing_positions": [],
       "unknown_positions": [],
-      "price_old_minor": null
+      "price_old_minor": null,
+      "name_kz": "Чек-ап «40 жасқа дейінгі ерлерге арналған базалық»"
     },
     {
       "package_id": "w-extended-40p",
@@ -226,7 +228,8 @@
       ],
       "missing_positions": [],
       "unknown_positions": [],
-      "price_old_minor": 398000
+      "price_old_minor": 398000,
+      "name_kz": "Чек-ап «40 жастан кейінгі әйелдерге арналған кеңейтілген»"
     },
     {
       "package_id": "m-extended-40p",
@@ -300,7 +303,8 @@
       ],
       "missing_positions": [],
       "unknown_positions": [],
-      "price_old_minor": 385000
+      "price_old_minor": 385000,
+      "name_kz": "Чек-ап «40 жастан кейінгі ерлерге арналған кеңейтілген»"
     },
     {
       "package_id": "kids-1-17",
@@ -354,7 +358,8 @@
         "Расширенный детский чекап (узкие специалисты, ЭхоКГ, гормоны) — отдельная страница на сайте, не включена в kids-1-17"
       ],
       "unknown_positions": [],
-      "price_old_minor": null
+      "price_old_minor": null,
+      "name_kz": "Мини чек-ап «Балалар» 1–17 жас"
     }
   ],
   "price_note": "Цены для демо взяты с greenclinic.kz (2026-09-30): Мужской Базовый 292 220, Женский Базовый 302 740, Мужской ОНКО 327 000, Детский Базовый 121 240. Женский расширенный — оценка. Старая цена у расширенных — демо-акция. Заменить прейскурантом PRIME."
