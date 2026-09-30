@@ -308,3 +308,26 @@ export type AnalyticsOverview = {
   note: string;
   is_demo: boolean;
 };
+
+export type DatabaseRow = {
+  case_id: string;
+  patient_id: string;
+  name: string;
+  phone: string | null;
+  language: "ru" | "kz";
+  created_at: string | null;
+  stage: string;
+  next_action: string;
+  program_id: string | null;
+  program: string | null;
+  price: number | null;
+  preferred_date: string | null;
+  appointment_at: string | null;
+  appointment_status: string | null;
+  owner_id: string | null;
+  age?: number | null;
+  sex?: string | null;
+  goal?: string | null;
+  recommended?: "optimal" | "maximum" | null;
+  factors?: string[];
+};

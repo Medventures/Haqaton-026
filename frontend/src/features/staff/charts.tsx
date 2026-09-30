@@ -287,6 +287,100 @@ export function SegmentedBar({ data }: { data: Segment[] }) {
   );
 }
 
+/**
+ * Progress ring (0–1) with a percentage label inside. Larger and label-bearing
+ * variant of RadialGauge, used next to KPI numbers and for funnel/segment %.
+ */
+export function ProgressRing({
+  value,
+  size = 52,
+  stroke = 6,
+  color = LIME,
+  track = "rgba(255,255,255,0.1)",
+  label,
+}: {
+  value: number | null;
+  size?: number;
+  stroke?: number;
+  color?: string;
+  track?: string;
+  label?: ReactNode;
+}) {
+  const mounted = useMountedFlag();
+  const reduced = usePrefersReducedMotion();
+  const v = Math.min(1, Math.max(0, value ?? 0));
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
+  const cx = size / 2;
+  const dash = v * c;
+  const pct = value === null || value === undefined ? "—" : `${Math.round(v * 100)}%`;
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Индикатор доли">
+        <circle cx={cx} cy={cx} r={r} fill="none" stroke={track} strokeWidth={stroke} />
+        <circle
+          cx={cx}
+          cy={cx}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={`${mounted || reduced ? dash : 0} ${c}`}
+          transform={`rotate(-90 ${cx} ${cx})`}
+          style={{ transition: reduced ? "none" : "stroke-dasharray .9s cubic-bezier(.22,.61,.36,1)" }}
+        />
+      </svg>
+      <div className="absolute inset-0 grid place-items-center">
+        <span className="text-[11.5px] font-semibold tabular-nums text-[#E8EFEA]">{label ?? pct}</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Thin animated progress bar (0–1) with an optional caption row above it.
+ * Used for money booked/realised of pipeline.
+ */
+export function ProgressBar({
+  value,
+  color = GREEN,
+  caption,
+  valueLabel,
+  height = 6,
+}: {
+  value: number | null;
+  color?: string;
+  caption?: ReactNode;
+  valueLabel?: ReactNode;
+  height?: number;
+}) {
+  const mounted = useMountedFlag();
+  const reduced = usePrefersReducedMotion();
+  const v = Math.min(1, Math.max(0, value ?? 0));
+  const width = Math.round(v * 100);
+  return (
+    <div>
+      {caption || valueLabel ? (
+        <div className="mb-1 flex items-baseline justify-between gap-3">
+          {caption ? <span className="min-w-0 flex-1 truncate text-[12px] text-[#9AABA2]">{caption}</span> : <span />}
+          {valueLabel ? <span className="shrink-0 text-[12px] tabular-nums text-[#9AABA2]">{valueLabel}</span> : null}
+        </div>
+      ) : null}
+      <div className="w-full overflow-hidden rounded-full bg-white/[0.06]" style={{ height }}>
+        <div
+          className="h-full rounded-full"
+          style={{
+            width: mounted || reduced ? `${Math.max(width > 0 ? 3 : 0, width)}%` : "0%",
+            background: color,
+            transition: reduced ? "none" : "width .8s cubic-bezier(.22,.61,.36,1)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 /** Small radial gauge (0–1) for utilisation-style KPIs. */
 export function RadialGauge({ value, size = 44 }: { value: number | null; size?: number }) {
   const mounted = useMountedFlag();

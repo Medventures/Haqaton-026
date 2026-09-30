@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 
 from fastapi import APIRouter, Query, Request
 
@@ -213,3 +214,85 @@ def patch_staff_case(case_id: str, body: dict, request: Request) -> dict:
             audit(conn, case_id, actor.token or actor.role, "case_org_patch", {k: body[k] for k in body})
         updated = conn.execute("SELECT * FROM cases WHERE id = ?", (case_id,)).fetchone()
         return enrich_case_row(project_case(conn, updated, "coordinator"))
+
+
+# --------------------------------------------------------------------------- database view
+_DB_CACHE: dict | None = None
+
+
+def _db_refs() -> dict:
+    """Catalogue names/prices and questionnaire option labels for the table view."""
+    global _DB_CACHE
+    if _DB_CACHE is None:
+        from app.db import DATA
+
+        cat = json.loads((DATA / "catalogue.real.json").read_text(encoding="utf-8"))
+        q = json.loads((DATA / "questionnaire.json").read_text(encoding="utf-8"))
+        _DB_CACHE = {
+            "programs": {p["package_id"]: (p["name"], p.get("price_minor")) for p in cat["packages"]},
+            "labels": {x["id"]: {o["code"]: o["label"] for o in x.get("options") or []} for x in q["questions"]},
+        }
+    return _DB_CACHE
+
+
+@router.get("/api/staff/database")
+def staff_database(request: Request) -> dict:
+    """One row per request (case) with organisational columns for every staff role.
+    Questionnaire-derived columns (age, sex, goal, factors) only for doctor/admin."""
+    from app.rules import classify
+    from app.tiers import build_offer, fired_rules
+
+    with connect() as conn:
+        actor = require_staff(conn, request)
+        medical = is_doctor(actor)
+        refs = _db_refs()
+        rows = conn.execute(
+            """SELECT c.*, p.display_name, p.phone, p.language AS p_language, r.answers_json,
+                      a.status AS appt_status, s.starts_at AS appt_starts
+               FROM cases c
+               JOIN patients p ON p.id = c.patient_id
+               LEFT JOIN questionnaire_revisions r ON r.id = c.current_revision_id
+               LEFT JOIN appointments a ON a.case_id = c.id AND a.status != 'cancelled'
+               LEFT JOIN slots s ON s.id = a.slot_id
+               ORDER BY c.created_at DESC, c.id"""
+        ).fetchall()
+        out = []
+        for row in rows:
+            name, price = refs["programs"].get(row["selected_program_id"] or "", (None, None))
+            item = {
+                "case_id": row["id"],
+                "patient_id": row["patient_id"],
+                "name": row["display_name"],
+                "phone": row["phone"],
+                "language": "kz" if (row["p_language"] or "ru") in {"kk", "kz"} else "ru",
+                "created_at": row["created_at"],
+                "stage": row["stage"],
+                "next_action": next_action_for(row["stage"]),
+                "program_id": row["selected_program_id"],
+                "program": name,
+                "price": price,
+                "preferred_date": row["preferred_date"],
+                "appointment_at": row["appt_starts"],
+                "appointment_status": row["appt_status"],
+                "owner_id": row["owner_id"],
+            }
+            if medical and row["answers_json"]:
+                answers = json.loads(row["answers_json"])
+                labels = refs["labels"]
+                try:
+                    offer = build_offer(answers, classify(answers))
+                    tier = offer.recommended if offer else None
+                    factors = [r["title_ru"] for r in fired_rules(answers)][:3]
+                except Exception:
+                    tier, factors = None, []
+                item.update(
+                    {
+                        "age": answers.get("age_years"),
+                        "sex": labels.get("exam_applicability", {}).get(answers.get("exam_applicability"), None),
+                        "goal": labels.get("visit_reason", {}).get(answers.get("visit_reason"), None),
+                        "recommended": tier,
+                        "factors": factors,
+                    }
+                )
+            out.append(item)
+        return {"rows": out, "medical_columns": medical, "total": len(out)}

@@ -15,7 +15,8 @@ import {
   Heatmap,
   LIME,
   MoneyCard,
-  RadialGauge,
+  ProgressBar,
+  ProgressRing,
   SegmentedBar,
   SegmentRateBars,
   Sparkline,
@@ -69,9 +70,7 @@ function KpiCard({
         <div className="mt-2 text-[12.5px] leading-tight text-[#9AABA2]">{caption}</div>
       </div>
       {gauge !== undefined ? (
-        <div className="relative shrink-0">
-          <RadialGauge value={gauge} />
-        </div>
+        <ProgressRing value={gauge} size={52} />
       ) : null}
     </div>
   );
@@ -178,12 +177,12 @@ export function StaffAnalyticsInner() {
       <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
         <KpiCard caption="Клиентов" value={formatCount(kpis.clients)} />
         <KpiCard caption="Визитов на сайт" value={formatCount(kpis.sessions)} />
-        <KpiCard caption="Завершили анкету" value={formatPercent(kpis.completion_rate)} />
-        <KpiCard caption="Записались после анкеты" value={formatPercent(kpis.booking_rate)} />
-        <KpiCard caption="Конверсия визит → запись" value={formatPercent(kpis.visit_conversion)} />
+        <KpiCard caption="Завершили анкету" value={formatPercent(kpis.completion_rate)} gauge={kpis.completion_rate} />
+        <KpiCard caption="Записались после анкеты" value={formatPercent(kpis.booking_rate)} gauge={kpis.booking_rate} />
+        <KpiCard caption="Конверсия визит → запись" value={formatPercent(kpis.visit_conversion)} gauge={kpis.visit_conversion} />
         <KpiCard caption="Приёмов на 7 дней" value={formatCount(kpis.upcoming_7d)} />
         <KpiCard caption="Загрузка терапевта, 14 дней" value={formatPercent(kpis.utilisation_14d)} gauge={kpis.utilisation_14d} />
-        <KpiCard caption="Выбирают «Максимальный»" value={formatPercent(kpis.maximum_share)} />
+        <KpiCard caption="Выбирают «Максимальный»" value={formatPercent(kpis.maximum_share)} gauge={kpis.maximum_share} />
       </div>
 
       <p className="mt-3 text-[12.5px] text-[#9AABA2]">
@@ -220,34 +219,37 @@ export function StaffAnalyticsInner() {
             hint="На одну программу"
           />
         </div>
-        <ChartCard className="mt-4" title="Выручка по программам" subtitle="Сумма по прейскуранту и число клиентов.">
-          <div className="grid gap-2.5">
-            {(() => {
-              const maxAmount = Math.max(1, ...data.revenue.by_program.map((p) => p.amount));
-              return data.revenue.by_program.map((p) => {
-                const width = Math.round((p.amount / maxAmount) * 100);
-                return (
-                  <div key={p.package_id}>
-                    <div className="mb-1 flex items-baseline justify-between gap-3">
-                      <span className="min-w-0 flex-1 truncate text-[13px] text-[#9AABA2]" title={p.name}>
-                        {p.name}
-                      </span>
-                      <span className="shrink-0 text-[12.5px] tabular-nums text-[#9AABA2]">
-                        <span className="font-semibold text-[#E8EFEA]">{formatMoney(p.amount, data.revenue.currency)}</span>
-                        <span className="ml-2">{p.count} чел.</span>
-                      </span>
-                    </div>
-                    <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-[#3FA37A] to-[#8BC53F]"
-                        style={{ width: `${Math.max(width > 0 ? 2 : 0, width)}%`, transition: "width .8s cubic-bezier(.22,.61,.36,1)" }}
-                      />
-                    </div>
-                  </div>
-                );
-              });
-            })()}
+        {data.revenue.pipeline > 0 ? (
+          <div className="mt-4 grid gap-3 rounded-2xl border border-white/[0.07] bg-[#18201C] p-5 sm:grid-cols-2">
+            <ProgressBar
+              value={data.revenue.booked / data.revenue.pipeline}
+              color={LIME}
+              caption="Записаны от потенциала"
+              valueLabel={`${formatPercent(data.revenue.booked / data.revenue.pipeline)} · ${formatMoney(
+                data.revenue.booked,
+                data.revenue.currency,
+              )}`}
+            />
+            <ProgressBar
+              value={data.revenue.realised / data.revenue.pipeline}
+              color={GREEN}
+              caption="В работе от потенциала"
+              valueLabel={`${formatPercent(data.revenue.realised / data.revenue.pipeline)} · ${formatMoney(
+                data.revenue.realised,
+                data.revenue.currency,
+              )}`}
+            />
           </div>
+        ) : null}
+        <ChartCard className="mt-4" title="Выручка по программам" subtitle="Доля в общей выручке по прейскуранту.">
+          <Donut
+            data={data.revenue.by_program
+              .filter((p) => p.amount > 0)
+              .map((p) => ({ label: p.name, count: Math.round(p.amount) }))}
+            centerValue={formatMoney(data.revenue.pipeline, data.revenue.currency)}
+            centerLabel="всего"
+            size={180}
+          />
         </ChartCard>
       </section>
 
@@ -263,25 +265,28 @@ export function StaffAnalyticsInner() {
             const width = Math.max(row.count > 0 ? 6 : 2, Math.round((row.count / first) * 100));
             const isWorst = row.index === worstDropIndex;
             return (
-              <div key={row.key}>
-                <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
-                  <span className="text-[13.5px] text-[#9AABA2]">{row.label}</span>
-                  <span className="text-[12.5px] tabular-nums text-[#9AABA2]">
-                    <span className="font-semibold text-[#E8EFEA]">{formatCount(row.count)}</span>
-                    {row.ofPrev !== null ? <span className="ml-2 text-[#8BC53F]">{formatPercent(row.ofPrev)} от пред.</span> : null}
-                    {row.ofFirst !== null ? <span className="ml-2 text-[#9AABA2]">{formatPercent(row.ofFirst)} от старта</span> : null}
-                  </span>
-                </div>
-                <div className="relative h-9 w-full overflow-hidden rounded-xl bg-white/[0.06]">
-                  <div
-                    className="flex h-full items-center rounded-xl bg-gradient-to-r from-[#3FA37A] to-[#8BC53F]"
-                    style={{ width: `${width}%`, transition: "width .8s cubic-bezier(.22,.61,.36,1)" }}
-                  />
-                  {isWorst ? (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-[#F2B84B]/15 px-2 py-0.5 text-[11px] font-medium text-[#F2C97A]">
-                      −{formatPercent(row.drop)} — крупнейший отток
+              <div key={row.key} className="flex items-center gap-3">
+                <ProgressRing value={row.ofFirst} size={44} stroke={5} color={isWorst ? "#F2B84B" : LIME} />
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex flex-wrap items-baseline justify-between gap-2">
+                    <span className="text-[13.5px] text-[#9AABA2]">{row.label}</span>
+                    <span className="text-[12.5px] tabular-nums text-[#9AABA2]">
+                      <span className="font-semibold text-[#E8EFEA]">{formatCount(row.count)}</span>
+                      {row.ofPrev !== null ? <span className="ml-2 text-[#8BC53F]">{formatPercent(row.ofPrev)} от пред.</span> : null}
+                      {row.ofFirst !== null ? <span className="ml-2 text-[#9AABA2]">{formatPercent(row.ofFirst)} от старта</span> : null}
                     </span>
-                  ) : null}
+                  </div>
+                  <div className="relative h-9 w-full overflow-hidden rounded-xl bg-white/[0.06]">
+                    <div
+                      className="flex h-full items-center rounded-xl bg-gradient-to-r from-[#3FA37A] to-[#8BC53F]"
+                      style={{ width: `${width}%`, transition: "width .8s cubic-bezier(.22,.61,.36,1)" }}
+                    />
+                    {isWorst ? (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-[#F2B84B]/15 px-2 py-0.5 text-[11px] font-medium text-[#F2C97A]">
+                        −{formatPercent(row.drop)} — крупнейший отток
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             );
@@ -322,6 +327,8 @@ export function StaffAnalyticsInner() {
           <HBars
             data={data.factors.map((f) => ({ label: f.label, count: f.count }))}
             color="#2f7f5f"
+            denominator={kpis.clients}
+            showShare
           />
         </ChartCard>
       </div>

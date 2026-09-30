@@ -1,16 +1,15 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CalendarDays,
+  Database,
   Globe,
   Plus,
   Stethoscope,
   UserCog,
-  Users,
   BarChart3,
 } from "lucide-react";
 import { api } from "@/api/client";
-import type { StaffPatientRow } from "@/api/types";
 import {
   setOwnerSession,
   useActor,
@@ -22,9 +21,7 @@ import {
   ShellMenuItem,
   ShellPrimaryButton,
   serifHeading,
-  type ShellRecentItem,
 } from "@/components/app/AppShell";
-import { stageDot, stageShortLabel } from "@/features/staff/format";
 
 type StaffRole = "coordinator" | "doctor" | "admin";
 
@@ -97,8 +94,6 @@ function SignInCard({ onEnter, busy }: { onEnter: (role: StaffRole) => void; bus
 export function StaffLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const actor = useActor();
-  const { caseId } = useParams();
-  const [patients, setPatients] = useState<StaffPatientRow[]>([]);
   const [busy, setBusy] = useState(false);
   const [restoring, setRestoring] = useState(true);
 
@@ -126,45 +121,12 @@ export function StaffLayout({ children }: { children: ReactNode }) {
       setOwnerSession(stored.token, stored.role);
       setRestoring(false);
     } else {
-      // Default demo account: admin (coordinator + doctor rights) so the CRM opens straight away.
+      // Default account: admin (coordinator + doctor rights) so the CRM opens straight away.
       void enter("admin").finally(() => setRestoring(false));
     }
     // Only run on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Load the sidebar recent list once we have a staff session.
-  useEffect(() => {
-    if (!isStaff) {
-      setPatients([]);
-      return;
-    }
-    let cancelled = false;
-    void api
-      .staffPatients()
-      .then((payload) => {
-        if (!cancelled) setPatients(payload.patients);
-      })
-      .catch(() => {
-        if (!cancelled) setPatients([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [isStaff, actor.ownerSession]);
-
-  const recent: ShellRecentItem[] = useMemo(
-    () =>
-      patients.map((p) => ({
-        key: p.case_id,
-        to: `/staff/cases/${p.case_id}`,
-        label: p.display_name,
-        meta: stageShortLabel(p.stage),
-        active: p.case_id === caseId,
-        dot: stageDot(p.stage),
-      })),
-    [patients, caseId],
-  );
 
   if (restoring && !isStaff) {
     return <div className="grid min-h-[100dvh] place-items-center bg-[#0F1412] text-[#9AABA2]">Загрузка…</div>;
@@ -189,16 +151,14 @@ export function StaffLayout({ children }: { children: ReactNode }) {
       theme="dark"
       primaryAction={
         <ShellPrimaryButton icon={<Plus className="h-4 w-4" aria-hidden />} onClick={() => navigate("/intake")}>
-          Новый клиент
+          Новая заявка
         </ShellPrimaryButton>
       }
       nav={[
-        { to: "/staff", label: "Клиенты", icon: <Users className="h-[18px] w-[18px]" aria-hidden />, end: true },
-        { to: "/staff/schedule", label: "Расписание", icon: <CalendarDays className="h-[18px] w-[18px]" aria-hidden /> },
         { to: "/staff/funnel", label: "Аналитика", icon: <BarChart3 className="h-[18px] w-[18px]" aria-hidden /> },
+        { to: "/staff", label: "База данных", icon: <Database className="h-[18px] w-[18px]" aria-hidden />, end: true },
+        { to: "/staff/schedule", label: "Расписание", icon: <CalendarDays className="h-[18px] w-[18px]" aria-hidden /> },
       ]}
-      recentTitle="Клиенты"
-      recent={recent}
       account={
         <ShellAccount initials={roleInitials} name={roleName} subtitle="Рабочее место клиники">
           {(["admin", "doctor", "coordinator"] as StaffRole[])

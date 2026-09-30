@@ -4,6 +4,7 @@ import type {
   Funnel,
   HealthCard,
   AnalyticsOverview,
+  DatabaseRow,
   OverviewCard,
   PatientLogin,
   PatientMe,
@@ -92,6 +93,7 @@ export const api = {
     request<Record<string, unknown>>(`/api/cases/${caseId}/results-review`, { method: "POST", body: JSON.stringify(body) }),
   patchTask: (taskId: string, body: { status: "active" | "completed" | "superseded" }) =>
     request<Record<string, unknown>>(`/api/tasks/${taskId}`, { method: "PATCH", body: JSON.stringify(body) }),
+  staffDatabase: () => request<{ rows: DatabaseRow[]; medical_columns: boolean; total: number }>("/api/staff/database"),
   analyticsOverview: () => request<AnalyticsOverview>("/api/staff/analytics/overview"),
   funnel: (from?: string, to?: string) => {
     const params = new URLSearchParams();

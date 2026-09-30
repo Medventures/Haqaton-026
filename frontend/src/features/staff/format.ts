@@ -152,3 +152,90 @@ export function appointmentStatusLabel(status: string | null | undefined): strin
       return status && status.trim() ? status : "—";
   }
 }
+
+/** Ordered pipeline stages (1..9) used by the database table & board. */
+export const STAGE_SEQUENCE = [
+  "questionnaire_saved",
+  "package_selected",
+  "therapist_booking_requested",
+  "therapist_booking_confirmed",
+  "consultation_completed",
+  "physician_plan_confirmed",
+  "preparation_in_progress",
+  "results_available",
+  "follow_up_planned",
+] as const;
+
+/** 1-based stage index for the progress bar; 0 when unknown. */
+export function stageIndex(stage: string | null | undefined): number {
+  if (!stage) return 0;
+  const i = STAGE_SEQUENCE.indexOf(stage as (typeof STAGE_SEQUENCE)[number]);
+  return i >= 0 ? i + 1 : 0;
+}
+
+/** Coloured pill palette for a stage (dark theme). */
+export function stageTone(stage: string | null | undefined): { bg: string; text: string; bar: string } {
+  switch (stage) {
+    case "therapist_booking_confirmed":
+    case "physician_plan_confirmed":
+    case "follow_up_planned":
+      return { bg: "bg-[#8BC53F]/15", text: "text-[#B9E07F]", bar: "bg-[#8BC53F]" };
+    case "consultation_completed":
+    case "results_available":
+      return { bg: "bg-[#F2B84B]/15", text: "text-[#F2C97A]", bar: "bg-[#F2B84B]" };
+    case "therapist_booking_requested":
+      return { bg: "bg-[#3FA37A]/15", text: "text-[#7FD3B0]", bar: "bg-[#3FA37A]" };
+    default:
+      return { bg: "bg-white/[0.06]", text: "text-[#C4D0C8]", bar: "bg-white/30" };
+  }
+}
+
+/** Format money in minor units → "292 220 ₸" (spaces as thousands separator). */
+export function formatPrice(price: number | null | undefined, currency = "KZT"): string {
+  if (price === null || price === undefined) return "—";
+  const symbol = currency === "KZT" ? "₸" : currency;
+  const grouped = Math.round(price)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return `${grouped} ${symbol}`;
+}
+
+/** Recommended tier → pill label. */
+export function recommendationLabel(tier: "optimal" | "maximum" | null | undefined): string {
+  switch (tier) {
+    case "optimal":
+      return "Оптимальный";
+    case "maximum":
+      return "Максимальный";
+    default:
+      return "С терапевтом";
+  }
+}
+
+/** Sex code → short RU. */
+export function sexLabel(sex: string | null | undefined): string {
+  switch (sex) {
+    case "female":
+    case "f":
+    case "ж":
+      return "Ж";
+    case "male":
+    case "m":
+    case "м":
+      return "М";
+    default:
+      return sex && sex.trim() ? sex : "—";
+  }
+}
+
+/** Language code → short RU. */
+export function languageLabel(lang: string | null | undefined): string {
+  switch (lang) {
+    case "ru":
+      return "Русский";
+    case "kz":
+      return "Қазақша";
+    default:
+      return lang && lang.trim() ? lang : "—";
+  }
+}

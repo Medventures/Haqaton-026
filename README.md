@@ -76,6 +76,66 @@ cd frontend && npx tsc -p tsconfig.json --noEmit && npx vite build
 | `SMS_PROVIDER` | `log` | Провайдер СМС; `log` ничего не отправляет |
 | `OTP_PEPPER` | dev-значение | Секрет для хэширования кодов — обязательно задать в проде |
 
+## Архитектура
+
+```mermaid
+flowchart LR
+  subgraph Browser["Браузер · React + Vite + TS + Tailwind"]
+    direction TB
+    P["Пациент (светлая тема)<br/>Главная → Анкета → Отчёт → Программы → Запись → Кабинет"]
+    S["Клиника (тёмная тема)<br/>Аналитика · База данных · Расписание · Карточка"]
+  end
+
+  subgraph API["FastAPI · backend/app"]
+    direction TB
+    Q["intake.py<br/>валидация анкеты, show_if"]
+    R["rules.py<br/>маршрут: дети · срочно · беременность · обсудить"]
+    T["tiers.py + conditions.py<br/>Оптимальный / Максимальный, объяснения"]
+    B["availability.py · appointments.py<br/>слоты, идемпотентная запись"]
+    C["cases.py · patient_portal.py · otp.py<br/>кабинет, вход по СМС-коду"]
+    ST["staff_reads.py · plans.py · results.py<br/>права врача / координатора"]
+    AN["analytics.py · analytics_overview.py<br/>воронка, выручка, сегменты, вопросы"]
+  end
+
+  subgraph Data["Данные"]
+    J[("JSON: каталог, анкета,<br/>правила объяснений")]
+    DB[("SQLite: клиенты, заявки, слоты,<br/>записи, согласия, события")]
+  end
+
+  P -- "/api/preview" --> Q --> R --> T
+  P -- "/api/cases, /appointments" --> B
+  P -- "/api/patient/otp/*, /me" --> C
+  S -- "/api/staff/*" --> ST
+  S -- "/api/staff/analytics/*" --> AN
+  P -. "анонимные события (без ответов)" .-> AN
+  T --- J
+  Q --- J
+  B --- DB
+  C --- DB
+  ST --- DB
+  AN --- DB
+```
+
+Путь данных пациента:
+
+```mermaid
+sequenceDiagram
+  participant U as Пациент
+  participant F as Фронтенд
+  participant A as API
+  participant D as SQLite
+  U->>F: ответы анкеты (по одному вопросу)
+  F->>A: POST /api/preview (ответы не сохраняются)
+  A-->>F: маршрут + 2 программы + объяснения + цены
+  U->>F: выбор программы, день и время, согласия
+  F->>A: POST /api/cases (заявка, согласия, анкета)
+  A->>D: клиент, заявка, ревизия анкеты
+  F->>A: POST /appointments (Idempotency-Key)
+  A->>D: бронь слота (уникальный индекс, 409 при конфликте)
+  A-->>F: подтверждено → вход в кабинет
+  Note over F,A: позже: вход по номеру + код из СМС, /api/patient/me
+```
+
 ## Структура проекта
 
 ```
