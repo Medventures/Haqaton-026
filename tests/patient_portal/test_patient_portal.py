@@ -145,3 +145,8 @@ def test_signed_in_patient_books_again_same_client(client):
     assert second["patient_id"] == first["patient_id"] and second["owner_session"] == first["owner_session"]
     me = client.get("/api/patient/me", headers=h).json()
     assert len(me["cases"]) == 2
+
+
+def test_last_request_partial_answers_send_to_quiz(client):
+    res = client.get("/api/patient/last-request", headers={"X-Owner-Session": "owner-patient-03"})
+    assert res.status_code == 404

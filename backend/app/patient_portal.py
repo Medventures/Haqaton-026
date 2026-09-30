@@ -219,6 +219,18 @@ def patient_last_request(request: Request) -> dict:
         ).fetchone()
         if row is None:
             raise ApiError(404, "no_request", "Сначала пройдите анкету")
+        # Old/partial questionnaires cannot be reused for booking → send the patient to the quiz.
+        from app.contracts import QuestionnaireSubmission
+        from app.intake import validate_submission
+
+        try:
+            validate_submission(QuestionnaireSubmission(
+                revision_id="check", questionnaire_version="demo-intake-v1",
+                processing_consent={"granted": True, "text_version": "demo-processing-v1"},
+                answers=json.loads(row["answers_json"]),
+            ))
+        except ApiError:
+            raise ApiError(404, "no_request", "Анкету нужно пройти заново")
         catalogue = json.loads((DATA / "catalogue.real.json").read_text(encoding="utf-8"))
         pkg = next((p for p in catalogue["packages"] if p["package_id"] == row["selected_program_id"]), None)
         return {
