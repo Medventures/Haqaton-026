@@ -368,7 +368,8 @@ export function BookingPage() {
       // One-time welcome banner in the cabinet, with the sign-in phone.
       const digits = phone.replace(/\D/g, "");
       const normalized = digits.length === 11 ? `+${digits}` : phone.trim();
-      window.sessionStorage.setItem("gc.welcome", JSON.stringify({ phone: normalized }));
+      // Banner only for a newly created cabinet, not for a patient booking again.
+      if (!me) window.sessionStorage.setItem("gc.welcome", JSON.stringify({ phone: normalized }));
     } catch {
       /* still navigate; cabinet will ask for login if needed */
     } finally {

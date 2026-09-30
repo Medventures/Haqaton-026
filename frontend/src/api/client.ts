@@ -121,6 +121,16 @@ export const api = {
     }),
   otpVerify: (phone: string, code: string) =>
     request<PatientLogin>("/api/patient/otp/verify", { method: "POST", body: JSON.stringify({ phone, code }) }),
+  patientLastRequest: () =>
+    request<{
+      answers: Record<string, unknown>;
+      doctor_note: string | null;
+      package_id: string | null;
+      program_name: string | null;
+      price_minor: number | null;
+      price_old_minor: number | null;
+      consultation_reason: string;
+    }>("/api/patient/last-request"),
   patientMe: () => request<PatientMe>("/api/patient/me"),
   patientLogout: () => request<{ ok: boolean }>("/api/patient/logout", { method: "POST" }),
 };

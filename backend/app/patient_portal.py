@@ -201,3 +201,32 @@ def patient_me(request: Request) -> dict:
             "cases": items,
             "is_demo": True,
         }
+
+
+@router.get("/api/patient/last-request")
+def patient_last_request(request: Request) -> dict:
+    """Latest saved questionnaire + programme of the signed-in patient, to book again in one step."""
+    _require_demo()
+    with connect() as conn:
+        actor = current_actor(conn, request)
+        if actor.role != "patient" or not actor.patient_id:
+            raise ApiError(401, "session_required", "Нужно войти в кабинет")
+        row = conn.execute(
+            """SELECT c.id, c.selected_program_id, c.consultation_reason, r.answers_json, r.doctor_note
+               FROM cases c JOIN questionnaire_revisions r ON r.id = c.current_revision_id
+               WHERE c.patient_id = ? ORDER BY c.created_at DESC, c.id DESC LIMIT 1""",
+            (actor.patient_id,),
+        ).fetchone()
+        if row is None:
+            raise ApiError(404, "no_request", "Сначала пройдите анкету")
+        catalogue = json.loads((DATA / "catalogue.real.json").read_text(encoding="utf-8"))
+        pkg = next((p for p in catalogue["packages"] if p["package_id"] == row["selected_program_id"]), None)
+        return {
+            "answers": json.loads(row["answers_json"]),
+            "doctor_note": row["doctor_note"],
+            "package_id": pkg["package_id"] if pkg else None,
+            "program_name": pkg["name"] if pkg else None,
+            "price_minor": pkg.get("price_minor") if pkg else None,
+            "price_old_minor": pkg.get("price_old_minor") if pkg else None,
+            "consultation_reason": row["consultation_reason"] or "check_programme",
+        }

@@ -9,7 +9,7 @@ from app.contracts import CONTRACT_VERSION, CreateCaseBody
 from app.db import connect, new_id
 from app.errors import ApiError
 from app.intake import validate_submission
-from app.sessions import normalize_phone
+from app.sessions import current_actor, normalize_phone
 
 router = APIRouter()
 
@@ -26,19 +26,25 @@ def create_case(body: CreateCaseBody, request: Request, response: Response) -> d
     if phone is None:
         raise ApiError(422, "phone_invalid", "Проверьте номер телефона", {"phone": "invalid"})
     active = validate_submission(body)
-    patient_id = new_id("patient")
     case_id = new_id("case")
-    token = new_id("owner")
     revision_id = new_id("rev")
     with connect() as conn:
-        conn.execute(
-            "INSERT INTO patients (id, display_name, contact_name, phone, language, is_demo) VALUES (?,?,?,?,?,1)",
-            (patient_id, body.contact_name.strip(), body.contact_name.strip(), phone, "ru"),
-        )
-        conn.execute(
-            "INSERT INTO owner_sessions (token, patient_id, created_at) VALUES (?,?,datetime('now'))",
-            (token, patient_id),
-        )
+        # Only an explicit session header (signed-in cabinet) links the booking to that client;
+        # a leftover cookie from an earlier anonymous booking does not.
+        actor = current_actor(conn, request) if request.headers.get("x-owner-session") else None
+        if actor is not None and actor.role == "patient" and actor.patient_id:
+            # Signed-in patient books again: new request under the same client and session.
+            patient_id, token = actor.patient_id, actor.token
+        else:
+            patient_id, token = new_id("patient"), new_id("owner")
+            conn.execute(
+                "INSERT INTO patients (id, display_name, contact_name, phone, language, is_demo) VALUES (?,?,?,?,?,1)",
+                (patient_id, body.contact_name.strip(), body.contact_name.strip(), phone, "ru"),
+            )
+            conn.execute(
+                "INSERT INTO owner_sessions (token, patient_id, created_at) VALUES (?,?,datetime('now'))",
+                (token, patient_id),
+            )
         conn.execute(
             """INSERT INTO cases (
                 id, patient_id, stage, current_revision_id, selected_program_id, consultation_reason,

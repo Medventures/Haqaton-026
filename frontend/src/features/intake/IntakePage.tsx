@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { api, ApiClientError } from "@/api/client";
 import type { QuestionDef, QuestionnaireConfig } from "@/api/types";
 import { track } from "@/analytics/tracker";
-import { btnPrimary, btnSecondary, glass, iconBtn } from "@/components/patient/buttons";
+import { btnPrimary, btnSecondary, glass } from "@/components/patient/buttons";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import {
   applyExclusiveMulti,
@@ -414,11 +414,6 @@ export function IntakePage() {
     navigate("/overview", { state: { revisionId } });
   }
 
-  const backButton = (
-    <button type="button" className={`${iconBtn} h-10 w-10`} aria-label={chrome.back} onClick={goBack}>
-      <ChevronLeft className="h-5 w-5" aria-hidden />
-    </button>
-  );
 
   if (loadError) {
     return (
@@ -456,7 +451,7 @@ export function IntakePage() {
   const maxNote = config.doctor_note.max_length || 200;
 
   return (
-    <PatientShell topLeft={q === CONSENT && !consent ? undefined : backButton}>
+    <PatientShell>
       <main className="mx-auto flex min-h-[100dvh] w-full max-w-xl flex-col px-5 pb-16 pt-28 md:pt-32">
         {q !== CONSENT && q !== EXIT_KIDS && q !== EXIT_URGENT ? (
           <div className="mb-8 grid gap-2.5" aria-live="polite">

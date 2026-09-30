@@ -127,3 +127,21 @@ def test_create_case_rejects_bad_phone(client):
     except AssertionError:
         return
     raise AssertionError("expected 422")
+
+
+def test_signed_in_patient_books_again_same_client(client):
+    first = _new_case(client, "+77015550000")
+    h = {"X-Owner-Session": first["owner_session"]}
+    last = client.get("/api/patient/last-request", headers=h)
+    assert last.status_code == 200 and last.json()["answers"]["age_years"] == 35
+    sub = {
+        "contract_version": "v4", "revision_id": "r2", "questionnaire_version": "demo-intake-v1",
+        "processing_consent": {"granted": True, "text_version": "demo-processing-v1"},
+        "answers": last.json()["answers"], "doctor_note": None,
+        "clinic_transfer": {"granted": True, "text_version": "demo-transfer-v1"},
+        "contact_name": "Тест Тестов", "phone": "+77015550000",
+    }
+    second = client.post("/api/cases", json=sub, headers=h).json()
+    assert second["patient_id"] == first["patient_id"] and second["owner_session"] == first["owner_session"]
+    me = client.get("/api/patient/me", headers=h).json()
+    assert len(me["cases"]) == 2

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { Menu, PanelLeftClose, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
 /*
@@ -62,16 +62,6 @@ export function AppShell({
         >
           <img src="/prime-logo.svg" alt="PRIME Green Clinic" className="h-7 w-auto" />
         </Link>
-        <button
-          type="button"
-          className={`hidden h-9 w-9 place-items-center rounded-lg transition lg:grid ${
-            dark ? "text-[#9AABA2] hover:bg-white/[0.06] hover:text-[#E8EFEA]" : "text-[#52655B] hover:bg-[#03392D]/[0.06] hover:text-[#03392D]"
-          }`}
-          aria-label="Свернуть панель"
-          onClick={() => setCollapsed(true)}
-        >
-          <PanelLeftClose className="h-[18px] w-[18px]" aria-hidden />
-        </button>
         <button
           type="button"
           className={`grid h-9 w-9 place-items-center rounded-lg lg:hidden ${

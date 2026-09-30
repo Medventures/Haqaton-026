@@ -33,6 +33,7 @@ import { openLogin } from "@/components/patient/loginSheetStore";
 import { applyDocumentLang, setUiLang, useUiLang, type UiLang } from "@/features/patient-home/welcome";
 
 import { CABINET_COPY, STEPS } from "./copy";
+import { VisitsCalendar } from "./VisitsCalendar";
 
 type PrepTask = { id: string; action: string; status: string; due_at: string | null; kind?: string };
 type Tab = "overview" | "visits" | "prep" | "results";
@@ -150,8 +151,36 @@ export function CabinetPage() {
       active: current ? c.case_id === current.case_id : false,
     }));
 
+  // New check-up for a signed-in patient: reuse the latest answers and programme and go
+  // straight to the booking calendar; without a saved questionnaire → the quiz.
+  async function bookAgain() {
+    try {
+      const last = await api.patientLastRequest();
+      navigate("/booking", {
+        state: {
+          submission: {
+            contract_version: "v4",
+            revision_id: `rebook-${Date.now()}`,
+            questionnaire_version: "demo-intake-v1",
+            processing_consent: { granted: true, text_version: "demo-processing-v1" },
+            answers: last.answers,
+            doctor_note: last.doctor_note,
+          },
+          selected_package_id: last.package_id,
+          program_name: last.program_name,
+          price_minor: last.price_minor,
+          price_old_minor: last.price_old_minor,
+          currency: "KZT",
+          consultation_reason: last.consultation_reason,
+        },
+      });
+    } catch {
+      navigate("/intake");
+    }
+  }
+
   const primaryAction = (
-    <ShellPrimaryButton icon={<Plus className="h-4 w-4" aria-hidden />} onClick={() => navigate("/intake")}>
+    <ShellPrimaryButton icon={<Plus className="h-4 w-4" aria-hidden />} onClick={() => void bookAgain()}>
       {copy.newCheckup}
     </ShellPrimaryButton>
   );
@@ -197,6 +226,7 @@ export function CabinetPage() {
         <CabinetBody
           key={current.case_id + tab}
           current={current}
+          allCases={me.cases}
           firstName={firstName}
           lang={lang}
           tab={tab}
@@ -268,12 +298,14 @@ function Greeting({ name, text }: { name: string; text: string }) {
 
 function CabinetBody({
   current,
+  allCases,
   firstName,
   lang,
   tab,
   setTab,
 }: {
   current: PatientCaseSummary;
+  allCases: PatientCaseSummary[];
   firstName: string;
   lang: UiLang;
   tab: Tab;
@@ -341,7 +373,7 @@ function CabinetBody({
   const apptWhen = fmt(lang, current.booked_starts_at);
 
   if (tab === "visits") {
-    return <VisitsTab cases={[current]} lang={lang} onOpenOverview={() => setTab("overview")} />;
+    return <VisitsTab cases={allCases} lang={lang} onOpenOverview={() => setTab("overview")} />;
   }
   if (tab === "prep") {
     return (
@@ -458,6 +490,16 @@ function VisitsTab({
   return (
     <div>
       <h2 className={`${serifHeading} text-[26px] text-[#10261E]`}>{copy.tabVisits}</h2>
+      {withAppt.length ? (
+        <div className="mt-5">
+          <VisitsCalendar
+            cases={cases}
+            lang={lang}
+            programFallback={copy.programFallback}
+            statusLabel={(st) => (st ? copy.appt[st] ?? st : null)}
+          />
+        </div>
+      ) : null}
       {withAppt.length === 0 ? (
         <p className="mt-4 text-[#52655B]">{copy.visitsEmpty}</p>
       ) : (
