@@ -29,11 +29,14 @@ export class ApiClientError extends Error {
   }
 }
 
-async function request<T>(path: string, init?: RequestInit & { idempotencyKey?: string }): Promise<T> {
+async function request<T>(path: string, init?: RequestInit & { idempotencyKey?: string; ownerSession?: string }): Promise<T> {
   const actor = getActor();
   const headers = new Headers(init?.headers);
   if (init?.body) headers.set("Content-Type", "application/json");
-  if (actor.ownerSession) headers.set("X-Owner-Session", actor.ownerSession);
+  // An explicit token (e.g. the session just issued by POST /api/cases) takes
+  // precedence over the store, which isn't updated yet during anonymous booking.
+  const ownerSession = init?.ownerSession ?? actor.ownerSession;
+  if (ownerSession) headers.set("X-Owner-Session", ownerSession);
   if (actor.analyticsSessionId) headers.set("X-Analytics-Session", actor.analyticsSessionId);
   if (init?.idempotencyKey) headers.set("Idempotency-Key", init.idempotencyKey);
   const response = await fetch(path, { ...init, headers });
@@ -70,11 +73,12 @@ export const api = {
     request<{ month: string; timezone: string; days: Array<{ date: string; available: number; busy: number }>; is_demo: boolean }>(
       `/api/therapists/${therapistId}/availability/month?month=${encodeURIComponent(month)}`,
     ),
-  book: (caseId: string, body: { slot_id: string; revision_id: string; consultation_reason: string }, idempotencyKey: string) =>
+  book: (caseId: string, body: { slot_id: string; revision_id: string; consultation_reason: string }, idempotencyKey: string, ownerSession?: string) =>
     request<Appointment>(`/api/cases/${caseId}/appointments`, {
       method: "POST",
       body: JSON.stringify(body),
       idempotencyKey,
+      ownerSession,
     }),
   staffPatients: (query = "") => request<{ patients: StaffPatientRow[] }>(`/api/staff/patients${query}`),
   staffCase: (caseId: string) => request<StaffCase>(`/api/staff/cases/${caseId}`),

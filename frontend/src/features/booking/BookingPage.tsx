@@ -339,6 +339,7 @@ export function BookingPage() {
           consultation_reason: consultationReason,
         },
         key,
+        caseRef.current?.ownerSession,
       );
       reminderAtBookingRef.current = reminderGranted;
       setCaseId(cid);
