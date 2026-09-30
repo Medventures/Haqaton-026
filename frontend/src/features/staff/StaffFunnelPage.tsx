@@ -12,11 +12,15 @@ import {
   Donut,
   GREEN,
   HBars,
+  Heatmap,
   LIME,
+  MoneyCard,
   RadialGauge,
   SegmentedBar,
+  SegmentRateBars,
   Sparkline,
   formatCount,
+  formatMoney,
   formatPercent,
 } from "@/features/staff/charts";
 
@@ -34,6 +38,15 @@ const WEEKDAY_SHORT = ["вс", "пн", "вт", "ср", "чт", "пт", "сб"];
 function formatGeneratedAt(iso: string): string {
   try {
     return format(parseISO(iso), "dd.MM.yyyy HH:mm");
+  } catch {
+    return iso;
+  }
+}
+
+/** Week-start date → 'с 01.09' style label. */
+function formatWeekLabel(iso: string): string {
+  try {
+    return `с ${format(parseISO(`${iso}T00:00:00Z`), "dd.MM")}`;
   } catch {
     return iso;
   }
@@ -178,7 +191,67 @@ export function StaffAnalyticsInner() {
         {typeof kpis.avg_age === "number" ? " лет" : ""}.
       </p>
 
-      {/* c. Funnel */}
+      {/* Выручка */}
+      <section className="mt-6">
+        <h2 className={`${serifHeading} text-[22px] text-[#E8EFEA]`}>Выручка</h2>
+        <p className="mt-1 text-[13.5px] text-[#9AABA2]">
+          Оценка по прейскуранту программ на каждом этапе воронки.
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <MoneyCard
+            caption="Потенциал всех заявок"
+            value={formatMoney(data.revenue.pipeline, data.revenue.currency)}
+            hint="Все, кто прошёл анкету"
+            accent
+          />
+          <MoneyCard
+            caption="Записаны на приём"
+            value={formatMoney(data.revenue.booked, data.revenue.currency)}
+            hint="Подтверждённые записи"
+          />
+          <MoneyCard
+            caption="Уже в работе"
+            value={formatMoney(data.revenue.realised, data.revenue.currency)}
+            hint="Приём состоялся или идёт"
+          />
+          <MoneyCard
+            caption="Средний чек"
+            value={formatMoney(data.revenue.avg_check, data.revenue.currency)}
+            hint="На одну программу"
+          />
+        </div>
+        <ChartCard className="mt-4" title="Выручка по программам" subtitle="Сумма по прейскуранту и число клиентов.">
+          <div className="grid gap-2.5">
+            {(() => {
+              const maxAmount = Math.max(1, ...data.revenue.by_program.map((p) => p.amount));
+              return data.revenue.by_program.map((p) => {
+                const width = Math.round((p.amount / maxAmount) * 100);
+                return (
+                  <div key={p.package_id}>
+                    <div className="mb-1 flex items-baseline justify-between gap-3">
+                      <span className="min-w-0 flex-1 truncate text-[13px] text-[#9AABA2]" title={p.name}>
+                        {p.name}
+                      </span>
+                      <span className="shrink-0 text-[12.5px] tabular-nums text-[#9AABA2]">
+                        <span className="font-semibold text-[#E8EFEA]">{formatMoney(p.amount, data.revenue.currency)}</span>
+                        <span className="ml-2">{p.count} чел.</span>
+                      </span>
+                    </div>
+                    <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#3FA37A] to-[#8BC53F]"
+                        style={{ width: `${Math.max(width > 0 ? 2 : 0, width)}%`, transition: "width .8s cubic-bezier(.22,.61,.36,1)" }}
+                      />
+                    </div>
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </ChartCard>
+      </section>
+
+      {/* Воронка */}
       <ChartCard
         className="mt-6"
         title="Путь клиента"
@@ -216,29 +289,27 @@ export function StaffAnalyticsInner() {
         </div>
       </ChartCard>
 
-      {/* d. Donuts + age columns */}
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <ChartCard title="Какую программу рекомендуем">
-          <Donut
-            data={data.tiers.filter((t) => t.count > 0).map((t) => ({ label: t.label, count: t.count }))}
-            centerValue={formatPercent(kpis.maximum_share)}
-            centerLabel="«Максимальный»"
-          />
-        </ChartCard>
-        <ChartCard title="Пол">
-          <Donut
-            data={data.sex.filter((s) => s.count > 0).map((s) => ({ label: s.label, count: s.count }))}
-            centerValue={formatCount(data.sex.reduce((sum, s) => sum + s.count, 0))}
-            centerLabel="ответов"
-          />
-        </ChartCard>
-        <ChartCard title="Возраст">
-          <ColumnChart data={data.age_groups.map((g) => ({ label: g.label, count: g.count }))} color={LIME} />
-        </ChartCard>
-      </div>
+      {/* Конверсия в запись по сегментам */}
+      <section className="mt-6">
+        <h2 className={`${serifHeading} text-[22px] text-[#E8EFEA]`}>Конверсия в запись по сегментам</h2>
+        <p className="mt-1 text-[13.5px] text-[#9AABA2]">
+          Доля клиентов, дошедших до записи. Лучший сегмент выделен.
+        </p>
+        <div className="mt-4 grid gap-4 lg:grid-cols-3">
+          <ChartCard title="Возраст">
+            <SegmentRateBars data={data.segments.age} />
+          </ChartCard>
+          <ChartCard title="Пол">
+            <SegmentRateBars data={data.segments.sex} />
+          </ChartCard>
+          <ChartCard title="Цель визита">
+            <SegmentRateBars data={data.segments.reason} />
+          </ChartCard>
+        </div>
+      </section>
 
-      {/* e. Programmes + factors */}
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      {/* Программы + факторы */}
+      <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <ChartCard title="Популярные программы">
           <HBars
             data={data.programs.map((p) => ({ label: p.name, count: p.count }))}
@@ -255,13 +326,30 @@ export function StaffAnalyticsInner() {
         </ChartCard>
       </div>
 
-      {/* f. Stages segmented bar */}
-      <ChartCard className="mt-4" title="Этапы клиентов" subtitle="Сколько клиентов сейчас на каждом этапе пути.">
+      {/* Когда записываются / Новые по неделям */}
+      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+        <ChartCard title="Когда записываются" subtitle="Приёмы по дням недели и часам, Пн–Пт, 09–17.">
+          <Heatmap data={data.heatmap} />
+        </ChartCard>
+        <ChartCard title="Новые клиенты по неделям" subtitle="Сколько клиентов появлялось каждую неделю.">
+          <ColumnChart
+            data={data.weekly_clients.map((w) => ({
+              label: formatWeekLabel(w.week),
+              count: w.count,
+              title: `${formatWeekLabel(w.week)}: ${w.count}`,
+            }))}
+            color={LIME}
+          />
+        </ChartCard>
+      </div>
+
+      {/* Этапы клиентов */}
+      <ChartCard className="mt-6" title="Этапы клиентов" subtitle="Сколько клиентов сейчас на каждом этапе пути.">
         <SegmentedBar data={data.stages.filter((s) => s.count > 0).map((s) => ({ label: s.label, count: s.count }))} />
       </ChartCard>
 
-      {/* g. Bookings by day */}
-      <ChartCard className="mt-4" title="Записи по дням" subtitle="Приёмы терапевта на ближайший месяц.">
+      {/* Записи по дням */}
+      <ChartCard className="mt-6" title="Записи по дням" subtitle="Приёмы терапевта на ближайший месяц.">
         <ColumnChart
           data={data.bookings_by_day.map((d) => {
             const dt = parseISO(`${d.date}T00:00:00Z`);
@@ -282,7 +370,39 @@ export function StaffAnalyticsInner() {
         />
       </ChartCard>
 
-      {/* h. Per-question analytics */}
+      {/* Демография */}
+      <section className="mt-6">
+        <h2 className={`${serifHeading} text-[22px] text-[#E8EFEA]`}>Демография и предпочтения</h2>
+        <div className="mt-4 grid gap-4 lg:grid-cols-4">
+          <ChartCard title="Какую программу рекомендуем">
+            <Donut
+              data={data.tiers.filter((t) => t.count > 0).map((t) => ({ label: t.label, count: t.count }))}
+              centerValue={formatPercent(kpis.maximum_share)}
+              centerLabel="«Максимальный»"
+            />
+          </ChartCard>
+          <ChartCard title="Пол">
+            <Donut
+              data={data.sex.filter((s) => s.count > 0).map((s) => ({ label: s.label, count: s.count }))}
+              centerValue={formatCount(data.sex.reduce((sum, s) => sum + s.count, 0))}
+              centerLabel="ответов"
+            />
+          </ChartCard>
+          <ChartCard title="Возраст">
+            <ColumnChart data={data.age_groups.map((g) => ({ label: g.label, count: g.count }))} color={LIME} />
+          </ChartCard>
+          <ChartCard title="Язык">
+            <Donut
+              data={data.languages.filter((l) => l.count > 0).map((l) => ({ label: l.label, count: l.count }))}
+              centerValue={formatCount(data.languages.reduce((sum, l) => sum + l.count, 0))}
+              centerLabel="клиентов"
+              size={140}
+            />
+          </ChartCard>
+        </div>
+      </section>
+
+      {/* Per-question analytics */}
       <section className="mt-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>

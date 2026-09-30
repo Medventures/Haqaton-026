@@ -60,9 +60,10 @@ def build_overview(conn, now: datetime | None = None) -> dict[str, Any]:
     program_names = {p["package_id"]: p["name"] for p in catalogue["packages"]}
 
     cases = conn.execute(
-        """SELECT c.id, c.stage, c.selected_program_id, r.answers_json
+        """SELECT c.id, c.stage, c.selected_program_id, c.created_at, c.language, r.answers_json
            FROM cases c LEFT JOIN questionnaire_revisions r ON r.id = c.current_revision_id"""
     ).fetchall()
+    prices = {p["package_id"]: p.get("price_minor") for p in catalogue["packages"] if isinstance(p.get("price_minor"), int)}
     answers_list = [json.loads(c["answers_json"]) for c in cases if c["answers_json"]]
 
     # --- funnel (sessions) ---
@@ -148,6 +149,61 @@ def build_overview(conn, now: datetime | None = None) -> dict[str, Any]:
             }
         )
 
+    # --- money: pipeline by stage, average check, revenue by programme ---
+    booked_stages = {"therapist_booking_confirmed", "consultation_completed", "physician_plan_confirmed",
+                     "preparation_in_progress", "results_available", "follow_up_planned"}
+    done_stages = {"physician_plan_confirmed", "preparation_in_progress", "results_available", "follow_up_planned"}
+    def value(rows) -> int:
+        return sum(prices.get(c["selected_program_id"], 0) for c in rows)
+    priced = [c for c in cases if c["selected_program_id"] in prices]
+    booked_rows = [c for c in priced if c["stage"] in booked_stages]
+    revenue = {
+        "pipeline": value(priced),
+        "booked": value(booked_rows),
+        "realised": value([c for c in priced if c["stage"] in done_stages]),
+        "avg_check": round(value(priced) / len(priced)) if priced else None,
+        "by_program": sorted(
+            [{"package_id": k, "name": program_names.get(k, k), "count": v, "amount": v * prices.get(k, 0)}
+             for k, v in Counter(c["selected_program_id"] for c in priced).items()],
+            key=lambda x: -x["amount"],
+        ),
+        "currency": "KZT",
+    }
+
+    # --- conversion by segment: share of clients who reached a booked stage ---
+    def seg_rate(rows) -> dict[str, Any]:
+        n = len(rows)
+        b = sum(1 for c in rows if c["stage"] in booked_stages)
+        return {"clients": n, "booked": b, "rate": _rate(b, n)}
+    with_answers = [(c, json.loads(c["answers_json"])) for c in cases if c["answers_json"]]
+    segments = {
+        "age": [{"label": label, **seg_rate([c for c, a in with_answers if isinstance(a.get("age_years"), int) and lo <= a["age_years"] <= hi])}
+                for label, lo, hi in AGE_GROUPS],
+        "sex": [{"label": lbl, **seg_rate([c for c, a in with_answers if a.get("exam_applicability") == key])}
+                for key, lbl in (("male", "Мужчины"), ("female", "Женщины"), ("discuss", "Не указали"))],
+        "reason": [{"label": lbl, **seg_rate([c for c, a in with_answers if a.get("visit_reason") == key])}
+                   for key, lbl in (("prevention", "Проверить здоровье"), ("complaints", "Есть жалобы"),
+                                    ("follow_up", "Контроль по назначению"), ("employer", "Для работы"))],
+    }
+
+    # --- booked-slot heatmap: weekday × hour (Almaty) ---
+    heat: Counter[tuple[int, int]] = Counter()
+    for a in appts:
+        local = parse_utc(a["starts_at"]).astimezone(CLINIC_TZ)
+        heat[(local.weekday(), local.hour)] += 1
+    heatmap = [{"weekday": d, "hour": h, "count": heat.get((d, h), 0)} for d in range(5) for h in range(9, 18)]
+
+    # --- new clients per week + language share ---
+    weeks: Counter[str] = Counter()
+    for c in cases:
+        try:
+            day = datetime.fromisoformat(str(c["created_at"]).replace(" ", "T")[:19])
+        except ValueError:
+            continue
+        monday = (day - timedelta(days=day.weekday())).date().isoformat()
+        weeks[monday] += 1
+    lang = Counter("kz" if (c["language"] or "ru") in {"kk", "kz"} else "ru" for c in cases)
+
     submitted = counts.get("intake_submitted", 0)
     confirmed = counts.get("appointment_confirmed", 0)
     started = counts.get("intake_started", 0)
@@ -184,6 +240,12 @@ def build_overview(conn, now: datetime | None = None) -> dict[str, Any]:
         "age_groups": age_groups,
         "bookings_by_day": [{"date": d, "count": n} for d, n in sorted(by_day.items())],
         "questions": questions,
+        "revenue": revenue,
+        "segments": segments,
+        "heatmap": heatmap,
+        "weekly_clients": [{"week": w, "count": n} for w, n in sorted(weeks.items())],
+        "languages": [{"key": "ru", "label": "Русский", "count": lang.get("ru", 0)},
+                      {"key": "kz", "label": "Қазақша", "count": lang.get("kz", 0)}],
         "note": "Ответы — по сохранённым анкетам записавшихся; отвал по вопросам — по анонимным сессиям без ответов.",
         "is_demo": True,
     }

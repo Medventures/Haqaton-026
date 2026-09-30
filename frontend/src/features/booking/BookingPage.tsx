@@ -435,12 +435,10 @@ export function BookingPage() {
             <p className="max-w-md text-[#52655B]">{copy.gateBody}</p>
             <Link
               to="/intake"
-              className="group inline-flex h-14 items-center gap-3 rounded-full bg-[#03392D] pl-7 pr-2 text-[17px] font-semibold text-white shadow-[0_12px_28px_rgba(3,57,45,.22)] transition hover:bg-[#02281f] active:scale-[0.98]"
+              className="group inline-flex h-14 items-center justify-center gap-2.5 rounded-full bg-[#03392D] px-6 text-[17px] font-semibold leading-none text-white shadow-[0_12px_28px_rgba(3,57,45,.22)] transition hover:bg-[#02281f] active:scale-[0.98]"
             >
-              {copy.gateCta}
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15 transition-transform group-hover:translate-x-0.5">
-                <ArrowRight className="h-5 w-5" aria-hidden />
-              </span>
+              <span className="truncate">{copy.gateCta}</span>
+              <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
             </Link>
           </div>
         </div>
@@ -660,7 +658,7 @@ export function BookingPage() {
                 />
                 <SummaryRow label={copy.summaryProgram} value={programName ?? copy.programFallback} />
                 <div className="flex items-baseline justify-between gap-3 py-1.5">
-                  <span className="text-[13px] text-[#52655B]">{copy.summaryPrice}</span>
+                  <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[#52655B]">{copy.summaryPrice}</span>
                   <div className="text-right">
                     <PriceBlock
                       priceMinor={priceMinor}
@@ -691,12 +689,10 @@ export function BookingPage() {
                 type="button"
                 disabled={!canSubmit}
                 onClick={() => void handleBook()}
-                className="group mt-4 hidden h-14 w-full items-center justify-between rounded-full bg-[#03392D] pl-7 pr-2 text-[17px] font-semibold text-white shadow-[0_12px_28px_rgba(3,57,45,.22)] transition hover:bg-[#02281f] active:scale-[0.98] disabled:opacity-45 md:flex"
+                className="group mt-4 hidden h-14 w-full items-center justify-center gap-2.5 rounded-full bg-[#03392D] px-6 text-[17px] font-semibold leading-none text-white shadow-[0_12px_28px_rgba(3,57,45,.22)] transition hover:bg-[#02281f] active:scale-[0.98] disabled:opacity-45 md:flex"
               >
-                <span>{submitting ? copy.submitting : copy.submit}</span>
-                <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15 transition-transform group-hover:translate-x-0.5">
-                  <ArrowRight className="h-5 w-5" aria-hidden />
-                </span>
+                <span className="truncate">{submitting ? copy.submitting : copy.submit}</span>
+                <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
               </button>
 
               <p className="mt-4 hidden text-center text-[12px] text-[#52655B] md:block">{copy.footerNote}</p>
@@ -885,8 +881,8 @@ function SwitchRow({
 function SummaryRow({ label, value, last = false }: { label: string; value: string; last?: boolean }) {
   return (
     <div className={`flex items-baseline justify-between gap-3 py-1.5 ${last ? "" : "border-b border-[#03392D]/[0.06]"}`}>
-      <span className="text-[13px] text-[#52655B]">{label}</span>
-      <span className="text-right text-[14px] font-semibold text-[#10261E]">{value}</span>
+      <span className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[#52655B]">{label}</span>
+      <span className="text-right text-[14px] font-semibold tabular-nums text-[#10261E]">{value}</span>
     </div>
   );
 }
@@ -956,12 +952,10 @@ function SuccessView({
           type="button"
           onClick={onOpenCabinet}
           disabled={adopting}
-          className="group inline-flex h-14 w-full items-center justify-between rounded-full bg-[#03392D] pl-7 pr-2 text-[17px] font-semibold text-white shadow-[0_12px_28px_rgba(3,57,45,.22)] transition hover:bg-[#02281f] active:scale-[0.98] disabled:opacity-60"
+          className="group inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-full bg-[#03392D] px-6 text-[17px] font-semibold leading-none text-white shadow-[0_12px_28px_rgba(3,57,45,.22)] transition hover:bg-[#02281f] active:scale-[0.98] disabled:opacity-60"
         >
-          <span>{copy.openCabinet}</span>
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-white/15 transition-transform group-hover:translate-x-0.5">
-            <ArrowRight className="h-5 w-5" aria-hidden />
-          </span>
+          <span className="truncate">{copy.openCabinet}</span>
+          <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
         </button>
         {canCalendar && caseId ? (
           <a

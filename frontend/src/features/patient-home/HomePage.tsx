@@ -3,10 +3,14 @@ import { ArrowRight, ShieldCheck, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { track } from "@/analytics/tracker";
 import { usePatient } from "@/app/patientSession";
-import { btnPrimaryArrow, btnPrimaryCentered, btnSecondary } from "@/components/patient/buttons";
+
 import { openLogin } from "@/components/patient/loginSheetStore";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import { applyDocumentLang, setWelcomeProfile, useUiLang, welcomeCopy } from "@/features/patient-home/welcome";
+
+/** Two equal, symmetric buttons: same size, centred label with one small icon each. */
+const homeBtn =
+  "inline-flex h-14 w-full select-none items-center justify-center gap-2.5 rounded-full px-6 text-[17px] font-semibold leading-none transition-[transform,background-color,border-color] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#03392D] focus-visible:ring-offset-2 sm:w-[280px]";
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -46,15 +50,13 @@ export function HomePage() {
         <p className="gc-rise gc-d1 mt-6 max-w-md text-[17px] leading-relaxed text-[#52655B] md:text-lg">{copy.sub}</p>
 
         <div className="gc-rise gc-d2 mt-10 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:justify-center">
-          <button type="button" className={`group ${btnPrimaryCentered} w-full sm:w-[300px]`} onClick={startCheckup}>
-            <span>{copy.book}</span>
-            <span className={btnPrimaryArrow}>
-              <ArrowRight className="h-5 w-5" aria-hidden />
-            </span>
+          <button type="button" className={`group ${homeBtn} bg-[#03392D] text-white shadow-[0_1px_2px_rgba(3,57,45,.12),0_12px_28px_rgba(3,57,45,.22)] hover:bg-[#02281f]`} onClick={startCheckup}>
+            <span className="truncate">{copy.book}</span>
+            <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
           </button>
-          <button type="button" className={`${btnSecondary} w-full justify-center sm:w-[300px]`} onClick={enterCabinet}>
-            <UserRound className="h-5 w-5 text-[#03392D]/70" strokeWidth={1.8} aria-hidden />
-            {me ? copy.cabinet : copy.login}
+          <button type="button" className={`${homeBtn} border border-[#03392D]/12 bg-white/80 text-[#03392D] backdrop-blur-xl hover:border-[#03392D]/30 hover:bg-white`} onClick={enterCabinet}>
+            <UserRound className="h-5 w-5 shrink-0 text-[#03392D]/70" strokeWidth={1.8} aria-hidden />
+            <span className="truncate">{me ? copy.cabinet : copy.login}</span>
           </button>
         </div>
       </main>

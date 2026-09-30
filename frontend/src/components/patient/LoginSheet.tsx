@@ -5,8 +5,7 @@ import { ApiClientError } from "@/api/client";
 import { requestOtp, verifyOtp } from "@/app/patientSession";
 import {
   btnGhost,
-  btnPrimaryArrow,
-  btnPrimaryCentered,
+  btnPrimary,
   btnSecondary,
   fieldBase,
   iconBtn,
@@ -295,11 +294,13 @@ function LoginDialog({ redirectTo }: { redirectTo: string | null }) {
                 {error}
               </p>
             ) : null}
-            <button type="submit" className={`group ${btnPrimaryCentered} w-full`} disabled={!phoneReady || sending}>
-              <span>{copy.getCode}</span>
-              <span className={btnPrimaryArrow}>
-                {sending ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <ArrowRight className="h-5 w-5" aria-hidden />}
-              </span>
+            <button type="submit" className={`group ${btnPrimary} w-full`} disabled={!phoneReady || sending}>
+              <span className="truncate">{copy.getCode}</span>
+              {sending ? (
+                <Loader2 className="h-5 w-5 shrink-0 animate-spin" aria-hidden />
+              ) : (
+                <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+              )}
             </button>
           </form>
         ) : (
@@ -359,13 +360,15 @@ function LoginDialog({ redirectTo }: { redirectTo: string | null }) {
             ) : null}
             <button
               type="submit"
-              className={`group ${btnPrimaryCentered} w-full`}
+              className={`group ${btnPrimary} w-full`}
               disabled={codeValue.length !== CODE_LEN || busy}
             >
-              <span>{copy.enter}</span>
-              <span className={btnPrimaryArrow}>
-                {busy ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <ArrowRight className="h-5 w-5" aria-hidden />}
-              </span>
+              <span className="truncate">{copy.enter}</span>
+              {busy ? (
+                <Loader2 className="h-5 w-5 shrink-0 animate-spin" aria-hidden />
+              ) : (
+                <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+              )}
             </button>
             <div className="-mt-1 flex flex-col items-center gap-1">
               {countdown > 0 ? (

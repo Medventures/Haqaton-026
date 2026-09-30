@@ -267,7 +267,7 @@ function StaffListInner() {
         ))}
       </div>
 
-      <div className="mt-5">
+      <div className="mt-6">
         {loading ? <p className="text-[14px] text-[#9AABA2]">Загрузка клиентов…</p> : null}
         {error ? <p className="text-[14px] text-[#F07167]">{error}</p> : null}
         {!loading && !error && filtered.length === 0 ? (

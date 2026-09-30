@@ -49,6 +49,14 @@ export function formatCount(value: number | null | undefined): string {
   return value.toLocaleString("ru-RU");
 }
 
+/** Money in the clinic currency, ru-RU grouping, no decimals: '13 557 300 ₸'. */
+export function formatMoney(value: number | null | undefined, currency = "KZT"): string {
+  if (value === null || value === undefined || Number.isNaN(value)) return "—";
+  const symbol = currency === "KZT" ? "₸" : currency;
+  const grouped = Math.round(value).toLocaleString("ru-RU").replace(/,/g, "\u00A0");
+  return `${grouped}\u00A0${symbol}`;
+}
+
 /** Section wrapper with a small heading and hairline card. */
 export function ChartCard({
   title,
@@ -361,5 +369,152 @@ export function Sparkline({
         </circle>
       ))}
     </svg>
+  );
+}
+
+/** Large money statistic card, optionally lime-accented for the headline figure. */
+export function MoneyCard({
+  caption,
+  value,
+  hint,
+  accent = false,
+}: {
+  caption: string;
+  value: string;
+  hint?: string;
+  accent?: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-2xl border px-4 py-4 ${
+        accent ? "border-[#8BC53F]/30 bg-[#8BC53F]/[0.08]" : "border-white/[0.07] bg-[#18201C]"
+      }`}
+    >
+      <div className="text-[12.5px] leading-tight text-[#9AABA2]">{caption}</div>
+      <div
+        className={`mt-2 text-[24px] font-semibold leading-none tabular-nums ${
+          accent ? "text-[#B9E07F]" : "text-[#E8EFEA]"
+        }`}
+      >
+        {value}
+      </div>
+      {hint ? <div className="mt-2 text-[11.5px] text-[#9AABA2]">{hint}</div> : null}
+    </div>
+  );
+}
+
+/**
+ * Grouped rate bars for a segment (age / sex / reason). Each row shows the
+ * booking rate as a bar with an 'N из M' caption; the best-performing row is
+ * highlighted lime.
+ */
+export function SegmentRateBars({
+  data,
+}: {
+  data: Array<{ label: string; clients: number; booked: number; rate: number | null }>;
+}) {
+  const mounted = useMountedFlag();
+  const reduced = usePrefersReducedMotion();
+  const rows = data.filter((d) => d.clients > 0);
+  let bestRate = -1;
+  rows.forEach((d) => {
+    if (d.rate !== null && d.rate > bestRate) bestRate = d.rate;
+  });
+  return (
+    <div className="grid gap-2.5">
+      {rows.map((d, i) => {
+        const rate = d.rate ?? 0;
+        const width = Math.round(Math.min(1, Math.max(0, rate)) * 100);
+        const isBest = d.rate !== null && d.rate === bestRate && bestRate > 0;
+        return (
+          <div key={`${d.label}-${i}`}>
+            <div className="mb-1 flex items-baseline justify-between gap-3">
+              <span className="min-w-0 flex-1 truncate text-[13px] text-[#9AABA2]" title={d.label}>
+                {d.label}
+              </span>
+              <span className="shrink-0 text-[12.5px] tabular-nums text-[#9AABA2]">
+                <span className={`font-semibold ${isBest ? "text-[#B9E07F]" : "text-[#E8EFEA]"}`}>
+                  {formatPercent(d.rate)}
+                </span>
+                <span className="ml-2">
+                  {d.booked} из {d.clients}
+                </span>
+              </span>
+            </div>
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: mounted || reduced ? `${Math.max(width > 0 ? 2 : 0, width)}%` : "0%",
+                  background: isBest ? LIME : GREEN,
+                  transition: reduced ? "none" : "width .8s cubic-bezier(.22,.61,.36,1)",
+                }}
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Weekday × hour heatmap. Rows are Mon–Fri (weekday 0–4), columns are the given
+ * hours (default 09–17). Cell intensity is a lime alpha scaled by count, with a
+ * native title tooltip.
+ */
+export function Heatmap({
+  data,
+  weekdayLabels = ["Пн", "Вт", "Ср", "Чт", "Пт"],
+  hours = [9, 10, 11, 12, 13, 14, 15, 16, 17],
+}: {
+  data: Array<{ weekday: number; hour: number; count: number }>;
+  weekdayLabels?: string[];
+  hours?: number[];
+}) {
+  const mounted = useMountedFlag();
+  const reduced = usePrefersReducedMotion();
+  const lookup = new Map<string, number>();
+  let max = 0;
+  data.forEach((d) => {
+    lookup.set(`${d.weekday}:${d.hour}`, d.count);
+    if (d.count > max) max = d.count;
+  });
+  const hourLabel = (h: number) => `${String(h).padStart(2, "0")}`;
+  return (
+    <div className="overflow-x-auto">
+      <div
+        className="grid gap-1"
+        style={{ gridTemplateColumns: `36px repeat(${hours.length}, minmax(26px, 1fr))`, minWidth: 36 + hours.length * 30 }}
+      >
+        <div aria-hidden />
+        {hours.map((h) => (
+          <div key={`h-${h}`} className="text-center text-[10.5px] tabular-nums text-[#9AABA2]">
+            {hourLabel(h)}
+          </div>
+        ))}
+        {weekdayLabels.map((wd, row) => (
+          <div key={`row-${row}`} className="contents">
+            <div className="flex items-center text-[11px] text-[#9AABA2]">{wd}</div>
+            {hours.map((h) => {
+              const count = lookup.get(`${row}:${h}`) ?? 0;
+              const alpha = max > 0 ? 0.08 + (count / max) * 0.82 : 0.08;
+              return (
+                <div
+                  key={`c-${row}-${h}`}
+                  className="aspect-square rounded-[5px]"
+                  title={`${wd}, ${hourLabel(h)}:00 — записей: ${count}`}
+                  style={{
+                    background: count > 0 ? `rgba(139, 197, 63, ${alpha.toFixed(3)})` : "rgba(255,255,255,0.04)",
+                    opacity: mounted || reduced ? 1 : 0,
+                    transition: reduced ? "none" : "opacity .6s ease",
+                  }}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

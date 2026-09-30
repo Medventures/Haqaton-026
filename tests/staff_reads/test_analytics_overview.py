@@ -31,3 +31,16 @@ def test_overview_with_synthetic_population(client):
     blob = res.text
     for forbidden in ("+7701", "syn-patient", "answers_json"):
         assert forbidden not in blob
+
+
+def test_overview_business_metrics(client):
+    with connect() as conn:
+        ensure_synthetic_population(conn)
+    d = client.get("/api/staff/analytics/overview", headers=ADMIN).json()
+    rev = d["revenue"]
+    assert rev["pipeline"] >= rev["booked"] >= rev["realised"] >= 0
+    assert rev["avg_check"] and rev["by_program"] and rev["currency"] == "KZT"
+    assert {s["label"] for s in d["segments"]["sex"]} >= {"Мужчины", "Женщины"}
+    assert all(0 <= (s["rate"] or 0) <= 1 for s in d["segments"]["age"])
+    assert len(d["heatmap"]) == 45 and sum(c["count"] for c in d["heatmap"]) > 0
+    assert d["weekly_clients"] and sum(x["count"] for x in d["languages"]) == d["kpis"]["clients"]

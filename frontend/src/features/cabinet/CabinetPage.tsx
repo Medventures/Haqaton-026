@@ -117,12 +117,10 @@ export function CabinetPage() {
           <button
             type="button"
             onClick={() => openLogin("/cabinet")}
-            className="group inline-flex h-12 w-full items-center justify-between rounded-full bg-[#03392D] pl-6 pr-1.5 text-[15px] font-semibold text-white transition hover:bg-[#02281f] active:scale-[0.99]"
+            className="group inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-[#03392D] px-6 text-[15px] font-semibold leading-none text-white transition hover:bg-[#02281f] active:scale-[0.99]"
           >
-            <span>{copy.signIn}</span>
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-white/15">
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </span>
+            <span className="truncate">{copy.signIn}</span>
+            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
           </button>
           <p className="text-[12px] text-[#52655B]">{copy.demo}</p>
         </div>
@@ -246,12 +244,10 @@ function EmptyCabinet({ copy, firstName, onStart }: { copy: (typeof CABINET_COPY
         <button
           type="button"
           onClick={onStart}
-          className="group mt-1 inline-flex h-11 w-fit items-center gap-2 rounded-full bg-[#03392D] pl-5 pr-1.5 text-[14.5px] font-semibold text-white transition hover:bg-[#02281f] active:scale-[0.99]"
+          className="group mt-1 inline-flex h-11 w-fit items-center justify-center gap-2.5 rounded-full bg-[#03392D] px-5 text-[14.5px] font-semibold leading-none text-white transition hover:bg-[#02281f] active:scale-[0.99]"
         >
-          {copy.newCheckup}
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-white/15">
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </span>
+          <span className="truncate">{copy.newCheckup}</span>
+          <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
         </button>
       </div>
     </div>
@@ -377,12 +373,10 @@ function CabinetBody({
           <button
             type="button"
             onClick={nextCta.onClick}
-            className="group mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-[#03392D] pl-5 pr-1.5 text-[14.5px] font-semibold text-white transition hover:bg-[#02281f] active:scale-[0.99]"
+            className="group mt-4 inline-flex h-11 items-center justify-center gap-2.5 rounded-full bg-[#03392D] px-5 text-[14.5px] font-semibold leading-none text-white transition hover:bg-[#02281f] active:scale-[0.99]"
           >
-            {nextCta.label}
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-white/15">
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </span>
+            <span className="truncate">{nextCta.label}</span>
+            <ArrowRight className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
           </button>
         ) : null}
       </div>
@@ -391,8 +385,8 @@ function CabinetBody({
       <MiniStepper steps={STEPS[lang]} current={current.step_index} />
 
       {/* Nearest appointment */}
-      <div className={`${shellCard} mt-6 p-5 md:p-6`}>
-        <p className="text-[13px] font-semibold text-[#52655B]">{copy.appointment}</p>
+      <div className={`${shellCard} mt-4 p-5 md:p-6`}>
+        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#03392D]/55">{copy.appointment}</p>
         {apptWhen ? (
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <p className="text-[24px] font-bold leading-tight tracking-[-0.01em] text-[#10261E]">{apptWhen}</p>
@@ -409,7 +403,7 @@ function CabinetBody({
 
       {/* Program */}
       <div className={`${shellCard} mt-4 p-5 md:p-6`}>
-        <p className="text-[13px] font-semibold text-[#52655B]">{copy.program}</p>
+        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[#03392D]/55">{copy.program}</p>
         <p className="mt-2 text-[17px] font-semibold leading-snug text-[#10261E]">
           {current.selected_program_name ?? copy.programUnknown}
         </p>

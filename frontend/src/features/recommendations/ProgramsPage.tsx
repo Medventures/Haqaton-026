@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { api } from "@/api/client";
 import type { ComparisonRow, Offer, OfferTier, QuestionnaireConfig, TierGroup } from "@/api/types";
 import { track } from "@/analytics/tracker";
-import { btnPrimary, btnPrimaryIcon, btnSecondary, glass } from "@/components/patient/buttons";
+import { btnPrimary, btnSecondary, glass } from "@/components/patient/buttons";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import { getFlow, type BookingLocationState, type ProgramsLocationState } from "@/features/intake/flowState";
 import { useUiLang, type UiLang } from "@/features/patient-home/welcome";
@@ -194,13 +194,11 @@ export function ProgramsPage() {
           <Link
             to="/booking"
             state={bookingState}
-            className={`group ${btnPrimary} justify-between sm:min-w-64`}
+            className={`group ${btnPrimary} w-full sm:w-auto sm:min-w-64`}
             onClick={() => track("cta_clicked", { component_id: "programs_no_offer" })}
           >
-            <span>{copy.bookTherapist}</span>
-            <span className={btnPrimaryIcon}>
-              <ArrowRight className="h-5 w-5" aria-hidden />
-            </span>
+            <span className="truncate">{copy.bookTherapist}</span>
+            <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
           </Link>
           <p className="text-[13px] text-[#52655B]">{copy.disclaimer}</p>
         </main>
@@ -233,7 +231,7 @@ export function ProgramsPage() {
 
   return (
     <PatientShell>
-      <main className="mx-auto flex min-h-[100dvh] max-w-5xl flex-col gap-10 px-5 pb-20 pt-28 md:px-8">
+      <main className="mx-auto flex min-h-[100dvh] max-w-5xl flex-col gap-8 px-5 pb-20 pt-28 md:px-8">
         {/* Header */}
         <header className="gc-rise grid gap-3 text-center">
           <h1 className="text-[34px] font-bold leading-[1.06] tracking-[-0.035em] text-[#10261E] md:text-[46px]">
@@ -280,7 +278,7 @@ export function ProgramsPage() {
         ) : null}
 
         {/* Cards */}
-        <section className="grid gap-4 md:grid-cols-2">
+        <section className="grid gap-6 md:grid-cols-2 md:gap-8">
           <TierCard
             tier={group.optimal}
             slot="optimal"
@@ -575,20 +573,14 @@ function TierCard({
           to="/booking"
           state={cta.bookingState}
           onClick={() => track("cta_clicked", { component_id: `programs_${slot}` })}
-          className={`group inline-flex h-14 items-center justify-between gap-3 rounded-full pl-7 pr-2 text-[16px] font-semibold transition-[transform,background-color] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+          className={`group inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-full px-6 text-[16px] font-semibold leading-none transition-[transform,background-color] duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
             dark
               ? "bg-white text-[#03392D] hover:bg-white/90 focus-visible:ring-white"
               : "bg-[#03392D] text-white hover:bg-[#02281f] focus-visible:ring-[#03392D]"
           }`}
         >
-          <span>{cta.label}</span>
-          <span
-            className={`grid h-10 w-10 place-items-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5 ${
-              dark ? "bg-[#03392D]/10 text-[#03392D]" : "bg-white/15 text-white"
-            }`}
-          >
-            <ArrowRight className="h-5 w-5" aria-hidden />
-          </span>
+          <span className="truncate">{cta.label}</span>
+          <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
         </Link>
       </div>
 

@@ -293,6 +293,18 @@ export type AnalyticsOverview = {
   age_groups: Array<{ label: string; count: number }>;
   bookings_by_day: Array<{ date: string; count: number }>;
   questions: QuestionStat[];
+  revenue: {
+    pipeline: number;
+    booked: number;
+    realised: number;
+    avg_check: number | null;
+    by_program: Array<{ package_id: string; name: string; count: number; amount: number }>;
+    currency: string;
+  };
+  segments: Record<"age" | "sex" | "reason", Array<{ label: string; clients: number; booked: number; rate: number | null }>>;
+  heatmap: Array<{ weekday: number; hour: number; count: number }>;
+  weekly_clients: Array<{ week: string; count: number }>;
+  languages: Array<{ key: string; label: string; count: number }>;
   note: string;
   is_demo: boolean;
 };

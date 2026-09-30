@@ -3,7 +3,7 @@ import { RefreshCw } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Preview } from "@/api/types";
 import { track } from "@/analytics/tracker";
-import { btnPrimary, btnPrimaryIcon, btnSecondary } from "@/components/patient/buttons";
+import { btnPrimary, btnSecondary } from "@/components/patient/buttons";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import {
   getFlow,
@@ -174,14 +174,12 @@ export function OverviewPage() {
       <PatientShell>
         <CenteredCard title={copy.errorTitle} body={previewError}>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <button type="button" className={`group ${btnPrimary} justify-between sm:min-w-56`} onClick={retry}>
-              <span>{copy.retry}</span>
-              <span className={btnPrimaryIcon}>
-                <RefreshCw className="h-5 w-5" aria-hidden />
-              </span>
+            <button type="button" className={`group ${btnPrimary} w-full sm:w-auto sm:min-w-56`} onClick={retry}>
+              <RefreshCw className="h-5 w-5 shrink-0" aria-hidden />
+              <span className="truncate">{copy.retry}</span>
             </button>
-            <Link to="/intake" className={btnSecondary}>
-              {copy.editAnswers}
+            <Link to="/intake" className={`${btnSecondary} w-full sm:w-auto`}>
+              <span className="truncate">{copy.editAnswers}</span>
             </Link>
           </div>
         </CenteredCard>

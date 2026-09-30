@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { api, ApiClientError } from "@/api/client";
 import type { QuestionDef, QuestionnaireConfig } from "@/api/types";
 import { track } from "@/analytics/tracker";
-import { btnPrimary, btnPrimaryArrow, btnPrimaryCentered, btnPrimaryIcon, btnSecondary, glass, iconBtn } from "@/components/patient/buttons";
+import { btnPrimary, btnSecondary, glass, iconBtn } from "@/components/patient/buttons";
 import { PatientShell } from "@/components/patient/PatientTopBar";
 import {
   applyExclusiveMulti,
@@ -448,7 +448,7 @@ export function IntakePage() {
 
   return (
     <PatientShell topLeft={q === CONSENT && !consent ? undefined : backButton}>
-      <main className="mx-auto flex min-h-[100dvh] w-full max-w-2xl flex-col px-5 pb-16 pt-28 md:pt-32">
+      <main className="mx-auto flex min-h-[100dvh] w-full max-w-xl flex-col px-5 pb-16 pt-28 md:pt-32">
         {q !== CONSENT && q !== EXIT_KIDS && q !== EXIT_URGENT ? (
           <div className="mb-8 grid gap-2.5" aria-live="polite">
             <div className="flex items-baseline justify-between text-[13px] font-semibold">
@@ -488,14 +488,12 @@ export function IntakePage() {
                 </p>
               ) : null}
               <div className="flex flex-col gap-3 sm:flex-row">
-                <button type="button" className={`group ${btnPrimary} justify-between sm:min-w-64`} onClick={grantConsent}>
-                  <span>{copy.agree}</span>
-                  <span className={btnPrimaryIcon}>
-                    <ArrowRight className="h-5 w-5" aria-hidden />
-                  </span>
+                <button type="button" className={`group ${btnPrimary} w-full sm:w-auto sm:min-w-64`} onClick={grantConsent}>
+                  <span className="truncate">{copy.agree}</span>
+                  <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                 </button>
-                <button type="button" className={btnSecondary} onClick={declineConsent}>
-                  {copy.decline}
+                <button type="button" className={`${btnSecondary} w-full sm:w-auto`} onClick={declineConsent}>
+                  <span className="truncate">{copy.decline}</span>
                 </button>
               </div>
             </section>
@@ -589,17 +587,15 @@ export function IntakePage() {
               <div className="flex w-full max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
                 <button
                   type="button"
-                  className={`group ${btnPrimary} justify-between sm:min-w-56`}
+                  className={`group ${btnPrimary} w-full sm:w-auto sm:min-w-56`}
                   onClick={() => navigate("/")}
                 >
-                  <span>{copy.home}</span>
-                  <span className={btnPrimaryIcon}>
-                    <ArrowRight className="h-5 w-5" aria-hidden />
-                  </span>
+                  <span className="truncate">{copy.home}</span>
+                  <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
                 </button>
-                <a href="tel:+77470942621" className={btnSecondary}>
-                  <Phone className="h-5 w-5 text-[#03392D]/70" strokeWidth={1.8} aria-hidden />
-                  {copy.call}
+                <a href="tel:+77470942621" className={`${btnSecondary} w-full sm:w-auto`}>
+                  <Phone className="h-5 w-5 shrink-0 text-[#03392D]/70" strokeWidth={1.8} aria-hidden />
+                  <span className="truncate">{copy.call}</span>
                 </a>
               </div>
             </section>
@@ -639,8 +635,8 @@ export function IntakePage() {
                 {copy.urgentTip}
               </p>
               <button type="button" className={btnSecondary} onClick={goBack}>
-                <ChevronLeft className="h-5 w-5 text-[#03392D]/70" aria-hidden />
-                {copy.changeAnswer}
+                <ChevronLeft className="h-5 w-5 shrink-0 text-[#03392D]/70" aria-hidden />
+                <span className="truncate">{copy.changeAnswer}</span>
               </button>
             </section>
           ) : null}
@@ -864,21 +860,19 @@ function NavRow({
       <button
         type="button"
         onClick={onBack}
-        className={`${btnSecondary} h-14 flex-1 justify-center sm:flex-none sm:min-w-40`}
+        className={`${btnSecondary} flex-1 sm:flex-none sm:min-w-40`}
       >
-        <ChevronLeft className="h-5 w-5 text-[#03392D]/70" aria-hidden />
-        <span>{backLabel}</span>
+        <ChevronLeft className="h-5 w-5 shrink-0 text-[#03392D]/70" aria-hidden />
+        <span className="truncate">{backLabel}</span>
       </button>
       <button
         type="button"
         onClick={onNext}
         disabled={nextDisabled}
-        className={`group ${btnPrimaryCentered} h-14 flex-1 sm:flex-none sm:min-w-56`}
+        className={`group ${btnPrimary} flex-1 sm:flex-none sm:min-w-56`}
       >
-        <span>{nextLabel}</span>
-        <span className={btnPrimaryArrow}>
-          <ArrowRight className="h-5 w-5" aria-hidden />
-        </span>
+        <span className="truncate">{nextLabel}</span>
+        <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
       </button>
     </div>
   );
