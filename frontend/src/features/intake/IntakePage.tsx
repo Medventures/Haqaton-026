@@ -241,6 +241,13 @@ export function IntakePage() {
     [config, answers],
   );
   const answeredCount = useMemo(() => visible.filter((q) => hasValue(answers[q.id])).length, [visible, answers]);
+  const liveProgress = useRef({ answered: answeredCount, total: visible.length });
+  liveProgress.current = { answered: answeredCount, total: visible.length };
+  const [frozenProgress, setFrozenProgress] = useState({ answered: 0, total: 0 });
+  const stepParam = params.get("q");
+  useEffect(() => {
+    setFrozenProgress(liveProgress.current);
+  }, [stepParam, visible.length === 0]);
 
   // No ?q=: consent screen first time; after consent (e.g. "edit answers" from overview) → review.
   const q = params.get("q") ?? (consent ? REVIEW : CONSENT);
@@ -442,8 +449,10 @@ export function IntakePage() {
     : q === REVIEW
       ? (lang === "kz" ? BLOCK_TITLES_KZ : BLOCK_TITLES).review
       : "";
-  const total = visible.length;
-  const pct = total ? Math.round((answeredCount / total) * 100) : 0;
+  // Progress is frozen per screen: picking an option (e.g. sex opens/hides the pregnancy
+  // question) must not move the bar until the user presses «Далее».
+  const { answered: shownAnswered, total } = frozenProgress;
+  const pct = total ? Math.round((shownAnswered / total) * 100) : 0;
   const maxNote = config.doctor_note.max_length || 200;
 
   return (
@@ -453,14 +462,14 @@ export function IntakePage() {
           <div className="mb-8 grid gap-2.5" aria-live="polite">
             <div className="flex items-baseline justify-between text-[13px] font-semibold">
               <span className="uppercase tracking-[0.08em] text-[#03392D]/60">{blockTitle}</span>
-              <span className="tabular-nums text-[#52655B]">{chrome.progress(answeredCount, total)}</span>
+              <span className="tabular-nums text-[#52655B]">{chrome.progress(shownAnswered, total)}</span>
             </div>
             <div
               className="h-1.5 w-full overflow-hidden rounded-full bg-[#03392D]/10"
               role="progressbar"
               aria-valuemin={0}
               aria-valuemax={total}
-              aria-valuenow={answeredCount}
+              aria-valuenow={shownAnswered}
             >
               <div
                 className="h-full rounded-full bg-gradient-to-r from-[#03392D] to-[#2f7d4f] transition-[width] duration-500 ease-[cubic-bezier(.32,.72,0,1)]"
