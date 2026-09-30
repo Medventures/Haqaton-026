@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Menu, X } from "lucide-react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 /*
  * Claude-app-like shell shared by the patient cabinet and the staff CRM:
@@ -16,6 +16,17 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 export type ShellTheme = "light" | "dark";
 
 export type ShellNavItem = { to: string; label: string; icon: ReactNode; badge?: string | number; end?: boolean };
+
+/** Path match. Query-string targets (cabinet tabs) match search too, so only one section is current. */
+function navItemActive(item: ShellNavItem, pathname: string, search: string): boolean {
+  const q = item.to.indexOf("?");
+  const path = q === -1 ? item.to : item.to.slice(0, q);
+  const query = q === -1 ? "" : item.to.slice(q);
+  if (query) return pathname === path && search === query;
+  if (item.end) return pathname === path && search === "";
+  return pathname === path || pathname.startsWith(`${path}/`);
+}
+
 export type ShellRecentItem = { key: string; to: string; label: string; meta?: string; active?: boolean; dot?: "green" | "amber" | "grey" };
 
 /** Chrome aria-labels for the shell. Staff area is Russian-only, so `ru` is the default. */
@@ -40,6 +51,7 @@ export function AppShell({
   account,
   children,
   wide = false,
+  align = "center",
   theme = "light",
   lang = "ru",
 }: {
@@ -50,6 +62,8 @@ export function AppShell({
   account?: ReactNode;
   children: ReactNode;
   wide?: boolean;
+  /** `start` pins the column to the sidebar with even gutters. Clinic keeps `center`. */
+  align?: "center" | "start";
   theme?: ShellTheme;
   lang?: "ru" | "kz";
 }) {
@@ -86,22 +100,22 @@ export function AppShell({
       {primaryAction ? <div className="px-3 pb-3">{primaryAction}</div> : null}
 
       <nav className="grid gap-0.5 px-3" aria-label={aria.sections}>
-        {nav.map((item) => (
-          <NavLink
+        {nav.map((item) => {
+          const isActive = navItemActive(item, location.pathname, location.search);
+          return (
+          <Link
             key={item.to}
             to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              `flex h-10 items-center gap-3 rounded-xl px-3 text-[14.5px] transition ${
-                dark
-                  ? isActive
-                    ? "bg-white/[0.06] font-semibold text-[#E8EFEA]"
-                    : "text-[#9AABA2] hover:bg-white/[0.04] hover:text-[#E8EFEA]"
-                  : isActive
-                    ? "bg-[#03392D]/[0.08] font-semibold text-[#10261E]"
-                    : "text-[#3d5048] hover:bg-[#03392D]/[0.05]"
-              }`
-            }
+            aria-current={isActive ? "page" : undefined}
+            className={`flex h-10 items-center gap-3 rounded-xl px-3 text-[14.5px] transition ${
+              dark
+                ? isActive
+                  ? "bg-white/[0.06] font-semibold text-[#E8EFEA]"
+                  : "text-[#9AABA2] hover:bg-white/[0.04] hover:text-[#E8EFEA]"
+                : isActive
+                  ? "bg-[#03392D]/[0.08] font-semibold text-[#10261E]"
+                  : "text-[#3d5048] hover:bg-[#03392D]/[0.05]"
+            }`}
           >
             <span className={dark ? "text-[#8BC53F]" : "text-[#03392D]/70"}>{item.icon}</span>
             <span className="flex-1 truncate">{item.label}</span>
@@ -114,8 +128,9 @@ export function AppShell({
                 {item.badge}
               </span>
             ) : null}
-          </NavLink>
-        ))}
+          </Link>
+          );
+        })}
       </nav>
 
       {recent.length ? (
@@ -233,7 +248,15 @@ export function AppShell({
         ) : null}
 
         <main className={`${collapsed ? "" : "lg:pl-[272px]"}`}>
-          <div className={`mx-auto w-full px-4 pb-20 pt-6 md:px-8 md:pt-10 ${wide ? "max-w-6xl" : "max-w-3xl"}`}>{children}</div>
+          <div
+            className={
+              align === "start"
+                ? "w-full max-w-5xl px-4 pb-16 pt-5 sm:px-6 lg:px-8 lg:pb-20 lg:pt-4"
+                : `mx-auto w-full px-4 pb-20 pt-6 md:px-8 md:pt-10 ${wide ? "max-w-6xl" : "max-w-3xl"}`
+            }
+          >
+            {children}
+          </div>
         </main>
       </div>
     </ShellThemeContext.Provider>

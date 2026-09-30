@@ -207,41 +207,43 @@ export function CabinetPage() {
   );
 
   return (
-    <AppShell primaryAction={primaryAction} nav={nav} recentTitle={copy.tabVisits} recent={recent} account={account} wide lang={lang}>
-      {welcomePhone !== null ? (
-        <div className="mb-5 flex items-start gap-3 rounded-2xl border border-[#8BC53F]/40 bg-[#8BC53F]/12 px-4 py-3">
-          <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#03392D] text-white">
-            <Sparkles className="h-4 w-4" aria-hidden />
-          </span>
-          <p className="min-w-0 flex-1 text-[14px] leading-snug text-[#18342A]">{copy.welcome(welcomePhone)}</p>
-          <button
-            type="button"
-            onClick={() => setWelcomePhone(null)}
-            className="shrink-0 rounded-full px-3 py-1 text-[13px] font-semibold text-[#03392D] transition hover:bg-[#03392D]/[0.06]"
-          >
-            {copy.welcomeDismiss}
-          </button>
-        </div>
-      ) : null}
-      {current ? (
-        <CabinetBody
-          key={current.case_id + tab}
-          current={current}
-          allCases={me.cases}
-          firstName={firstName}
-          lang={lang}
-          tab={tab}
-          setTab={(t) => {
-            const next = new URLSearchParams(params);
-            if (t === "overview") next.delete("tab");
-            else next.set("tab", t);
-            setParams(next, { replace: true });
-          }}
-        />
-      ) : (
-        <EmptyCabinet copy={copy} firstName={firstName} onStart={() => navigate("/intake")} />
-      )}
-      <p className="mt-10 text-[12px] text-[#52655B]">{copy.demo}</p>
+    <AppShell primaryAction={primaryAction} nav={nav} recentTitle={copy.tabVisits} recent={recent} account={account} align="start" lang={lang}>
+      <div className={tab === "visits" ? undefined : "max-w-3xl"}>
+        {welcomePhone !== null ? (
+          <div className="mb-5 flex items-start gap-3 rounded-2xl border border-[#8BC53F]/40 bg-[#8BC53F]/12 px-4 py-3">
+            <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#03392D] text-white">
+              <Sparkles className="h-4 w-4" aria-hidden />
+            </span>
+            <p className="min-w-0 flex-1 text-[14px] leading-snug text-[#18342A]">{copy.welcome(welcomePhone)}</p>
+            <button
+              type="button"
+              onClick={() => setWelcomePhone(null)}
+              className="shrink-0 rounded-full px-3 py-1 text-[13px] font-semibold text-[#03392D] transition hover:bg-[#03392D]/[0.06]"
+            >
+              {copy.welcomeDismiss}
+            </button>
+          </div>
+        ) : null}
+        {current ? (
+          <CabinetBody
+            key={current.case_id + tab}
+            current={current}
+            allCases={me.cases}
+            firstName={firstName}
+            lang={lang}
+            tab={tab}
+            setTab={(t) => {
+              const next = new URLSearchParams(params);
+              if (t === "overview") next.delete("tab");
+              else next.set("tab", t);
+              setParams(next, { replace: true });
+            }}
+          />
+        ) : (
+          <EmptyCabinet copy={copy} firstName={firstName} onStart={() => navigate("/intake")} />
+        )}
+        <p className="mt-10 text-[12px] text-[#52655B]">{copy.demo}</p>
+      </div>
     </AppShell>
   );
 }
