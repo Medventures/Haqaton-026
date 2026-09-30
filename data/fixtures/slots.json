@@ -1,0 +1,7 @@
+[
+  {"id": "demo-slot-1006-1000", "therapist_id": "demo-therapist-01", "starts_at": "2026-10-06T05:00:00Z", "ends_at": "2026-10-06T05:30:00Z", "blocked": false},
+  {"id": "demo-slot-1006-1030", "therapist_id": "demo-therapist-01", "starts_at": "2026-10-06T05:30:00Z", "ends_at": "2026-10-06T06:00:00Z", "blocked": true},
+  {"id": "demo-slot-1006-1100", "therapist_id": "demo-therapist-01", "starts_at": "2026-10-06T06:00:00Z", "ends_at": "2026-10-06T06:30:00Z", "blocked": false},
+  {"id": "demo-slot-1007-1000", "therapist_id": "demo-therapist-01", "starts_at": "2026-10-07T05:00:00Z", "ends_at": "2026-10-07T05:30:00Z", "blocked": false},
+  {"id": "demo-slot-1008-1400", "therapist_id": "demo-therapist-01", "starts_at": "2026-10-08T09:00:00Z", "ends_at": "2026-10-08T09:30:00Z", "blocked": false}
+]

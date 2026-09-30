@@ -1,0 +1,41 @@
+{
+  "version": "demo-matching-fixtures-v1",
+  "mode": "demo",
+  "note": "Synthetic fixtures for rules/matcher tests. Not clinical accuracy.",
+  "baseline_clean_female": {
+    "age_years": 39,
+    "exam_applicability": "female",
+    "visit_reason": "prevention",
+    "symptoms": ["none"],
+    "pregnancy": "no",
+    "conditions": ["none"],
+    "medicines": "no",
+    "family": ["none"],
+    "tobacco": "never",
+    "prior_results": "no"
+  },
+  "baseline_clean_male": {
+    "age_years": 39,
+    "exam_applicability": "male",
+    "visit_reason": "prevention",
+    "symptoms": ["none"],
+    "conditions": ["none"],
+    "medicines": "no",
+    "family": ["none"],
+    "tobacco": "never",
+    "prior_results": "no"
+  },
+  "expected": {
+    "age_17": {"workflow_class": "adult_scope_excluded", "candidates_empty": true},
+    "age_39": {"workflow_class": "catalogue_only", "review_flags": ["policy_unapproved"]},
+    "age_40": {
+      "workflow_class": "catalogue_only",
+      "review_flags": ["age_boundary_unresolved", "policy_unapproved"]
+    },
+    "age_41": {"workflow_class": "catalogue_only", "review_flags": ["policy_unapproved"]},
+    "pregnancy_unknown": {"workflow_class": "pregnancy_review"},
+    "pregnancy_no": {"workflow_class": "catalogue_only"},
+    "medicines_unknown": {"workflow_class": "catalogue_only"},
+    "medicines_yes": {"workflow_class": "needs_clinician_review"}
+  }
+}

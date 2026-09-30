@@ -1,0 +1,361 @@
+{
+  "catalogue_version": "primegc-real-v1",
+  "mode": "demo",
+  "approval_status": "unapproved",
+  "source_hub": "https://primegc.kz/check-up/",
+  "captured_at": "2026-09-30",
+  "note": "Blocks copied from public package pages. No prices on site → price_minor null. Not clinic-approved clinical policy.",
+  "packages": [
+    {
+      "package_id": "w-basic-u40",
+      "name": "Чек-ап «Женский базовый до 40 лет»",
+      "age_branch": "u40",
+      "applicability": [
+        "female"
+      ],
+      "composition_status": "partial",
+      "approval_status": "unapproved",
+      "price_minor": null,
+      "currency": "KZT",
+      "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/",
+      "blocks": [
+        {
+          "id": "labs",
+          "label": "Лабораторная диагностика (ОАК 34 параметра, липиды, щитовидная железа, витамины D/B12, фолиевая кислота, железо, ферритин, моча и др.)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "gyn",
+          "label": "Гинекологическое обследование: консультация гинеколога, УЗИ малого таза, УЗИ молочных желез",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "cardio",
+          "label": "Обследование сердца: ЭхоКГ, ЭКГ",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "vessels",
+          "label": "УЗДГ сосудов шеи и нижних конечностей",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "lung_ct",
+          "label": "КТ легких (Revolution EVO 128 срезов)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "endoscopy",
+          "label": "Гастроскопия и колоноскопия под анестезией, тест на Хеликобактер",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "consultations",
+          "label": "Консультации врача-куратора, гинеколога и офтальмолога с разбором результатов",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        },
+        {
+          "id": "ophthalmology",
+          "label": "Офтальмологическое обследование с тонометрией",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/"
+        }
+      ],
+      "known_services": [
+        "Лабораторная диагностика (ОАК 34 параметра, липиды, щитовидная железа, витамины D/B12, фолиевая кислота, железо, ферритин, моча и др.)",
+        "Гинекологическое обследование: консультация гинеколога, УЗИ малого таза, УЗИ молочных желез",
+        "Обследование сердца: ЭхоКГ, ЭКГ",
+        "УЗДГ сосудов шеи и нижних конечностей",
+        "КТ легких (Revolution EVO 128 срезов)",
+        "Гастроскопия и колоноскопия под анестезией, тест на Хеликобактер",
+        "Консультации врача-куратора, гинеколога и офтальмолога с разбором результатов",
+        "Офтальмологическое обследование с тонометрией"
+      ],
+      "missing_positions": [],
+      "unknown_positions": [],
+      "price_old_minor": null
+    },
+    {
+      "package_id": "m-basic-u40",
+      "name": "Чек-ап «Мужской базовый до 40 лет»",
+      "age_branch": "u40",
+      "applicability": [
+        "male"
+      ],
+      "composition_status": "partial",
+      "approval_status": "unapproved",
+      "price_minor": null,
+      "currency": "KZT",
+      "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/",
+      "blocks": [
+        {
+          "id": "labs",
+          "label": "Лабораторная диагностика (ОАК 34 параметра, липиды, щитовидная железа, витамины D/B12, ПСА, глюкоза, HbA1c, моча и др.)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "cardio",
+          "label": "Обследование сердца: ЭхоКГ, ЭКГ",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "vessels",
+          "label": "УЗДГ сосудов шеи и нижних конечностей",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "lung_ct",
+          "label": "КТ легких (Revolution EVO 128 срезов)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "prostate",
+          "label": "ТРУЗИ простаты, УЗИ мочевого пузыря и мошонки, ПСА",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "endoscopy",
+          "label": "Гастроскопия и колоноскопия под анестезией, тест на Хеликобактер",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "consultations",
+          "label": "Консультации врача-куратора и офтальмолога с разбором результатов",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        },
+        {
+          "id": "ophthalmology",
+          "label": "Офтальмологическое обследование с тонометрией",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/"
+        }
+      ],
+      "known_services": [
+        "Лабораторная диагностика (ОАК 34 параметра, липиды, щитовидная железа, витамины D/B12, ПСА, глюкоза, HbA1c, моча и др.)",
+        "Обследование сердца: ЭхоКГ, ЭКГ",
+        "УЗДГ сосудов шеи и нижних конечностей",
+        "КТ легких (Revolution EVO 128 срезов)",
+        "ТРУЗИ простаты, УЗИ мочевого пузыря и мошонки, ПСА",
+        "Гастроскопия и колоноскопия под анестезией, тест на Хеликобактер",
+        "Консультации врача-куратора и офтальмолога с разбором результатов",
+        "Офтальмологическое обследование с тонометрией"
+      ],
+      "missing_positions": [],
+      "unknown_positions": [],
+      "price_old_minor": null
+    },
+    {
+      "package_id": "w-extended-40p",
+      "name": "Чек-ап «Женский расширенный пакет после 40 лет»",
+      "age_branch": "40p",
+      "applicability": [
+        "female"
+      ],
+      "composition_status": "partial",
+      "approval_status": "unapproved",
+      "price_minor": null,
+      "currency": "KZT",
+      "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/",
+      "blocks": [
+        {
+          "id": "labs",
+          "label": "Лабораторная диагностика (более 50 анализов: ОАК, липиды, гормоны, витамины, гомоцистеин, ферритин и др.)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "oncology_markers",
+          "label": "Панель женских онкомаркеров (СА 15-3, СА 125, СА 72-4, СА 19-9, РЭА и др.)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "gyn",
+          "label": "Гинекологический скрининг: консультация гинеколога, ПАП-тест, УЗИ малого таза, УЗИ молочных желез",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "mammography",
+          "label": "Маммография 2D/3D с томосинтезом",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "cardio",
+          "label": "Обследование сердца: ЭхоКГ, ЭКГ",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "vessels",
+          "label": "УЗДГ сосудов шеи и нижних конечностей",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "ultrasound",
+          "label": "УЗИ комплексное (брюшная полость, почки, надпочечники), УЗИ щитовидной железы",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "lung_ct",
+          "label": "КТ грудной клетки (Revolution EVO 128 срезов)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "endoscopy",
+          "label": "Видеогастроскопия и видеоколоноскопия под седацией",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "consultations",
+          "label": "Консультации врача-куратора, гинеколога и офтальмолога с разбором результатов",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        },
+        {
+          "id": "ophthalmology",
+          "label": "Офтальмологическое обследование",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/"
+        }
+      ],
+      "known_services": [
+        "Лабораторная диагностика (более 50 анализов: ОАК, липиды, гормоны, витамины, гомоцистеин, ферритин и др.)",
+        "Панель женских онкомаркеров (СА 15-3, СА 125, СА 72-4, СА 19-9, РЭА и др.)",
+        "Гинекологический скрининг: консультация гинеколога, ПАП-тест, УЗИ малого таза, УЗИ молочных желез",
+        "Маммография 2D/3D с томосинтезом",
+        "Обследование сердца: ЭхоКГ, ЭКГ",
+        "УЗДГ сосудов шеи и нижних конечностей",
+        "УЗИ комплексное (брюшная полость, почки, надпочечники), УЗИ щитовидной железы",
+        "КТ грудной клетки (Revolution EVO 128 срезов)",
+        "Видеогастроскопия и видеоколоноскопия под седацией",
+        "Консультации врача-куратора, гинеколога и офтальмолога с разбором результатов",
+        "Офтальмологическое обследование"
+      ],
+      "missing_positions": [],
+      "unknown_positions": [],
+      "price_old_minor": null
+    },
+    {
+      "package_id": "m-extended-40p",
+      "name": "Чек-ап «Мужской расширенный после 40 лет»",
+      "age_branch": "40p",
+      "applicability": [
+        "male"
+      ],
+      "composition_status": "partial",
+      "approval_status": "unapproved",
+      "price_minor": null,
+      "currency": "KZT",
+      "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/",
+      "blocks": [
+        {
+          "id": "labs",
+          "label": "Лабораторная диагностика (более 40 анализов: ОАК, липиды, гормоны, витамины, гомоцистеин, ПСА и др.)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "prostate",
+          "label": "Онкоскрининг простаты: общий и свободный ПСА, ТРУЗИ",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "cardio",
+          "label": "Обследование сердца: ЭхоКГ, ЭКГ",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "vessels",
+          "label": "УЗДГ сосудов шеи и нижних конечностей",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "ultrasound",
+          "label": "УЗИ комплексное (брюшная полость, почки, надпочечники), УЗИ щитовидной железы, УЗИ мошонки",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "lung_ct",
+          "label": "КТ грудной клетки (Revolution EVO 128 срезов)",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "endoscopy",
+          "label": "Видеогастроскопия и видеоколоноскопия под седацией",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "consultations",
+          "label": "Консультации врача-куратора, уролога и офтальмолога с разбором результатов",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        },
+        {
+          "id": "ophthalmology",
+          "label": "Офтальмологическое обследование",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/"
+        }
+      ],
+      "known_services": [
+        "Лабораторная диагностика (более 40 анализов: ОАК, липиды, гормоны, витамины, гомоцистеин, ПСА и др.)",
+        "Онкоскрининг простаты: общий и свободный ПСА, ТРУЗИ",
+        "Обследование сердца: ЭхоКГ, ЭКГ",
+        "УЗДГ сосудов шеи и нижних конечностей",
+        "УЗИ комплексное (брюшная полость, почки, надпочечники), УЗИ щитовидной железы, УЗИ мошонки",
+        "КТ грудной клетки (Revolution EVO 128 срезов)",
+        "Видеогастроскопия и видеоколоноскопия под седацией",
+        "Консультации врача-куратора, уролога и офтальмолога с разбором результатов",
+        "Офтальмологическое обследование"
+      ],
+      "missing_positions": [],
+      "unknown_positions": [],
+      "price_old_minor": null
+    },
+    {
+      "package_id": "kids-1-17",
+      "name": "Мини чек-ап «Детский» 1–17 лет",
+      "age_branch": "kids",
+      "applicability": [
+        "female",
+        "male",
+        "discuss"
+      ],
+      "composition_status": "partial",
+      "approval_status": "unapproved",
+      "price_minor": null,
+      "currency": "KZT",
+      "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/",
+      "blocks": [
+        {
+          "id": "consultations",
+          "label": "Консультация педиатра с оценкой физического развития",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/"
+        },
+        {
+          "id": "ophthalmology",
+          "label": "Консультация офтальмолога",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/"
+        },
+        {
+          "id": "labs",
+          "label": "Лабораторная диагностика: ОАК, ОАМ, глюкоза, основные биохимические показатели",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/"
+        },
+        {
+          "id": "ultrasound",
+          "label": "УЗИ органов брюшной полости",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/"
+        },
+        {
+          "id": "cardio",
+          "label": "ЭКГ",
+          "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/"
+        }
+      ],
+      "known_services": [
+        "Консультация педиатра с оценкой физического развития",
+        "Консультация офтальмолога",
+        "Лабораторная диагностика: ОАК, ОАМ, глюкоза, основные биохимические показатели",
+        "УЗИ органов брюшной полости",
+        "ЭКГ"
+      ],
+      "missing_positions": [
+        "Расширенный детский чекап (узкие специалисты, ЭхоКГ, гормоны) — отдельная страница на сайте, не включена в kids-1-17"
+      ],
+      "unknown_positions": [],
+      "price_old_minor": null
+    }
+  ],
+  "price_note": "На primegc.kz цены не опубликованы (проверено 2026-09-30). Заполнить price_minor из прейскуранта клиники; price_old_minor — только при реальной акции клиники."
+}

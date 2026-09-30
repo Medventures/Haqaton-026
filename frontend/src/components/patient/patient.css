@@ -1,0 +1,168 @@
+/* Green Clinic v5 patient motion system. CSS only; everything off under reduced motion. */
+
+.gc-rise {
+  animation: gc-rise 420ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.gc-d1 { animation-delay: 80ms; }
+.gc-d2 { animation-delay: 160ms; }
+.gc-d3 { animation-delay: 240ms; }
+.gc-d4 { animation-delay: 320ms; }
+
+@keyframes gc-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Photo: soft scale-in */
+.gc-photo {
+  animation: gc-photo 700ms cubic-bezier(0.32, 0.72, 0, 1) 120ms both;
+}
+@keyframes gc-photo {
+  from { opacity: 0; transform: scale(0.97) translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Quiz question change: direction-aware slide */
+.gc-slide-next { animation: gc-slide-next 300ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+.gc-slide-prev { animation: gc-slide-prev 300ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+@keyframes gc-slide-next {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes gc-slide-prev {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Sheet / modal */
+.gc-backdrop {
+  animation: gc-fade 240ms ease both;
+}
+.gc-sheet {
+  animation: gc-sheet 320ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+@keyframes gc-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes gc-sheet {
+  from { opacity: 0; transform: translateY(28px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Popover menu */
+.gc-pop {
+  transform-origin: top right;
+  animation: gc-pop 180ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+@keyframes gc-pop {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* "You are here" pulse in the journey stepper */
+.gc-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid rgba(139, 197, 63, 0.55);
+  animation: gc-pulse 1.8s ease-out infinite;
+}
+@keyframes gc-pulse {
+  from { opacity: 1; transform: scale(0.85); }
+  to { opacity: 0; transform: scale(1.35); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-rise,
+  .gc-photo,
+  .gc-slide-next,
+  .gc-slide-prev,
+  .gc-backdrop,
+  .gc-sheet,
+  .gc-pop {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .gc-pulse::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ---------- Aurora backdrop: slow, independent drifting colour fields ---------- */
+.gc-aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.75;
+  will-change: transform;
+  mix-blend-mode: multiply;
+}
+.gc-aurora-a {
+  width: 62vmax; height: 62vmax; left: -18vmax; top: -22vmax;
+  background: radial-gradient(circle at 40% 40%, #a9dcc8 0%, rgba(169, 220, 200, 0) 68%);
+  animation: gc-drift-a 26s ease-in-out infinite alternate;
+}
+.gc-aurora-b {
+  width: 58vmax; height: 58vmax; right: -20vmax; bottom: -24vmax;
+  background: radial-gradient(circle at 55% 50%, #8fcab3 0%, rgba(143, 202, 179, 0) 66%);
+  animation: gc-drift-b 32s ease-in-out infinite alternate;
+}
+.gc-aurora-c {
+  width: 40vmax; height: 40vmax; left: 38%; top: 8%;
+  background: radial-gradient(circle, #dcefbf 0%, rgba(220, 239, 191, 0) 65%);
+  opacity: 0.6;
+  animation: gc-drift-c 22s ease-in-out infinite alternate;
+}
+.gc-aurora-d {
+  width: 36vmax; height: 36vmax; left: 6%; bottom: -6%;
+  background: radial-gradient(circle, #c7e6f0 0%, rgba(199, 230, 240, 0) 65%);
+  opacity: 0.5;
+  animation: gc-drift-d 28s ease-in-out infinite alternate;
+}
+@keyframes gc-drift-a {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(14vmax, 8vmax, 0) scale(1.12); }
+  100% { transform: translate3d(6vmax, 18vmax, 0) scale(0.96); }
+}
+@keyframes gc-drift-b {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-16vmax, -6vmax, 0) scale(1.08); }
+  100% { transform: translate3d(-8vmax, -16vmax, 0) scale(1.14); }
+}
+@keyframes gc-drift-c {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-18vmax, 10vmax, 0) scale(1.2); }
+  100% { transform: translate3d(8vmax, 20vmax, 0) scale(0.9); }
+}
+@keyframes gc-drift-d {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(20vmax, -12vmax, 0) scale(1.1); }
+  100% { transform: translate3d(34vmax, -4vmax, 0) scale(1); }
+}
+/* Very faint noise so large blurred fields do not band. */
+.gc-grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+@media (prefers-reduced-motion: reduce) {
+  .gc-aurora { animation: none; }
+}
+
+/* ---------- Quiz age field: soft green selection + calm caret ---------- */
+.gc-age-input {
+  caret-color: #03392D;
+}
+.gc-age-input::selection {
+  background: rgba(139, 197, 63, 0.35);
+  color: inherit;
+}
+.gc-age-input::-moz-selection {
+  background: rgba(139, 197, 63, 0.35);
+  color: inherit;
+}

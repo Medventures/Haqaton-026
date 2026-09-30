@@ -1,0 +1,33 @@
+{
+  "mode": "demo",
+  "approved_by": null,
+  "cards": [
+    {
+      "id": "card-bp",
+      "interval_index": 0,
+      "title": "Давление",
+      "text": "44% взрослых с гипертонией не знают о ней. Обсудите проверку давления с терапевтом.",
+      "source_label": "ВОЗ, оценка 2024, взрослые 30–79 лет, мир",
+      "source_url": "https://www.who.int/news-room/fact-sheets/detail/hypertension",
+      "population": "взрослые 30–79 лет в мире"
+    },
+    {
+      "id": "card-chol",
+      "interval_index": 1,
+      "title": "Холестерин",
+      "text": "Повышенный холестерин обычно не ощущается. Необходимость анализа обсудите на приёме.",
+      "source_label": "NHS, review 2026",
+      "source_url": "https://www.nhs.uk/conditions/high-cholesterol/",
+      "population": "общая образовательная справка, не личный риск"
+    },
+    {
+      "id": "card-screen",
+      "interval_index": 2,
+      "title": "Скрининг",
+      "text": "Скрининг может искать изменения до симптомов. Подходящие исследования выбирайте с врачом.",
+      "source_label": "NCI, контекст онкоскрининга",
+      "source_url": "https://www.cancer.gov/about-cancer/screening/patient-screening-overview-pdq",
+      "population": "образовательный контекст скрининга, не обещание найти все заболевания"
+    }
+  ]
+}

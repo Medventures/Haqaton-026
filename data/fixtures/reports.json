@@ -1,0 +1,96 @@
+[
+  {
+    "id": "report-07",
+    "case_id": "case-07",
+    "source_document_id": "doc-demo-07",
+    "observed_on": "2026-09-20",
+    "title": "Демо-лаборатория",
+    "original_text": "Гемоглобин в пределах указанного диапазона источника. Глюкоза в пределах указанного диапазона источника. Холестерин общий в пределах указанного диапазона источника. АЛТ в пределах указанного диапазона источника. Образование не выявлено.",
+    "review_status": "pending",
+    "observations": [
+      {
+        "id": "obs-07-hb",
+        "name": "Гемоглобин",
+        "value": "140",
+        "unit": "г/л",
+        "reference_range": "120-160",
+        "assertion": "stated",
+        "source_span": "Гемоглобин в пределах указанного диапазона источника."
+      },
+      {
+        "id": "obs-07-glu",
+        "name": "Глюкоза",
+        "value": "5.1",
+        "unit": "ммоль/л",
+        "reference_range": "3.9-6.1",
+        "assertion": "stated",
+        "source_span": "Глюкоза в пределах указанного диапазона источника."
+      },
+      {
+        "id": "obs-07-chol",
+        "name": "Холестерин общий",
+        "value": "4.8",
+        "unit": "ммоль/л",
+        "reference_range": "3.0-5.2",
+        "assertion": "stated",
+        "source_span": "Холестерин общий в пределах указанного диапазона источника."
+      },
+      {
+        "id": "obs-07-alt",
+        "name": "АЛТ",
+        "value": "22",
+        "unit": "Ед/л",
+        "reference_range": "0-41",
+        "assertion": "stated",
+        "source_span": "АЛТ в пределах указанного диапазона источника."
+      },
+      {
+        "id": "obs-07-neg",
+        "name": "Образование",
+        "value": null,
+        "unit": null,
+        "reference_range": null,
+        "assertion": "negated",
+        "source_span": "Образование не выявлено."
+      }
+    ]
+  },
+  {
+    "id": "report-08",
+    "case_id": "case-08",
+    "source_document_id": "doc-demo-08",
+    "observed_on": "2026-09-18",
+    "title": "Демо-заключение",
+    "original_text": "Очаговых изменений не выявлено. Злокачественный процесс не исключается по этому фрагменту и требует разбора врачом. Термин XYZ-demo в источнике не расшифрован.",
+    "review_status": "reviewed",
+    "observations": [
+      {
+        "id": "obs-08-neg",
+        "name": "Очаговые изменения",
+        "value": null,
+        "unit": null,
+        "reference_range": null,
+        "assertion": "negated",
+        "source_span": "Очаговых изменений не выявлено."
+      },
+      {
+        "id": "obs-08-unc",
+        "name": "Неопределённый фрагмент",
+        "value": null,
+        "unit": null,
+        "reference_range": null,
+        "assertion": "uncertain",
+        "source_span": "Злокачественный процесс не исключается"
+      },
+      {
+        "id": "obs-08-unk",
+        "name": "XYZ-demo",
+        "value": null,
+        "unit": null,
+        "reference_range": null,
+        "assertion": "unknown",
+        "source_span": "Термин XYZ-demo в источнике не расшифрован."
+      }
+    ]
+  }
+]

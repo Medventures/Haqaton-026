@@ -1,0 +1,582 @@
+{
+  "questionnaire_version": "demo-intake-v1",
+  "mode": "demo",
+  "approval_status": "unapproved",
+  "blocks": [
+    "about",
+    "wellbeing",
+    "history",
+    "results",
+    "review"
+  ],
+  "doctor_note": {
+    "max_length": 200,
+    "label": "Что ещё важно знать врачу?",
+    "label_kz": "Дәрігерге тағы не білу маңызды?"
+  },
+  "questions": [
+    {
+      "id": "age_years",
+      "legacy_ids": [
+        "A3"
+      ],
+      "block": "about",
+      "answer_type": "number",
+      "label": "Сколько вам лет?",
+      "required": true,
+      "validation": {
+        "min": 0,
+        "max": 110
+      },
+      "label_kz": "Жасыңыз нешеде?"
+    },
+    {
+      "id": "exam_applicability",
+      "legacy_ids": [
+        "A4"
+      ],
+      "block": "about",
+      "answer_type": "single",
+      "label": "Ваш пол",
+      "required": true,
+      "options": [
+        {
+          "code": "male",
+          "label": "Мужской",
+          "label_kz": "Ер"
+        },
+        {
+          "code": "female",
+          "label": "Женский",
+          "label_kz": "Әйел"
+        },
+        {
+          "code": "discuss",
+          "label": "Обсужу с врачом",
+          "label_kz": "Дәрігермен талқылаймын"
+        }
+      ],
+      "label_kz": "Жынысыңыз"
+    },
+    {
+      "id": "pregnancy",
+      "legacy_ids": [
+        "A7"
+      ],
+      "block": "about",
+      "answer_type": "single",
+      "label": "Вы сейчас беременны?",
+      "show_if": {
+        "all": [
+          {
+            "id": "exam_applicability",
+            "in": [
+              "female",
+              "discuss"
+            ]
+          },
+          {
+            "id": "age_years",
+            "gte": 18
+          },
+          {
+            "id": "age_years",
+            "lte": 55
+          }
+        ]
+      },
+      "required_if": {
+        "all": [
+          {
+            "id": "exam_applicability",
+            "in": [
+              "female",
+              "discuss"
+            ]
+          },
+          {
+            "id": "age_years",
+            "gte": 18
+          },
+          {
+            "id": "age_years",
+            "lte": 55
+          }
+        ]
+      },
+      "options": [
+        {
+          "code": "yes",
+          "label": "Да",
+          "label_kz": "Иә"
+        },
+        {
+          "code": "no",
+          "label": "Нет",
+          "label_kz": "Жоқ"
+        },
+        {
+          "code": "unknown",
+          "label": "Возможно",
+          "label_kz": "Мүмкін"
+        },
+        {
+          "code": "not_applicable",
+          "label": "Ко мне не относится",
+          "label_kz": "Маған қатысы жоқ"
+        }
+      ],
+      "label_kz": "Қазір жүктісіз бе?"
+    },
+    {
+      "id": "visit_reason",
+      "legacy_ids": [
+        "B1"
+      ],
+      "block": "about",
+      "answer_type": "single",
+      "label": "Зачем вам чек-ап?",
+      "required": true,
+      "options": [
+        {
+          "code": "prevention",
+          "label": "Просто проверить здоровье",
+          "label_kz": "Денсаулықты тексеру"
+        },
+        {
+          "code": "complaints",
+          "label": "Меня что-то беспокоит",
+          "label_kz": "Бір нәрсе мазалайды"
+        },
+        {
+          "code": "follow_up",
+          "label": "Врач направил на контроль",
+          "label_kz": "Дәрігер бақылауға жіберді"
+        },
+        {
+          "code": "employer",
+          "label": "Нужно для работы",
+          "label_kz": "Жұмысқа керек"
+        }
+      ],
+      "label_kz": "Чек-ап не үшін керек?"
+    },
+    {
+      "id": "complaint_topic",
+      "block": "about",
+      "answer_type": "single",
+      "label": "Что беспокоит больше всего?",
+      "required_if": {
+        "id": "visit_reason",
+        "eq": "complaints"
+      },
+      "show_if": {
+        "id": "visit_reason",
+        "eq": "complaints"
+      },
+      "options": [
+        {
+          "code": "heart",
+          "label": "Сердце или давление",
+          "label_kz": "Жүрек немесе қысым"
+        },
+        {
+          "code": "breathing",
+          "label": "Дыхание, кашель",
+          "label_kz": "Тыныс, жөтел"
+        },
+        {
+          "code": "digestion",
+          "label": "Желудок, кишечник",
+          "label_kz": "Асқазан, ішек"
+        },
+        {
+          "code": "urinary",
+          "label": "Мочеполовая система",
+          "label_kz": "Несеп-жыныс жүйесі"
+        },
+        {
+          "code": "general",
+          "label": "Усталость, общее самочувствие",
+          "label_kz": "Шаршау, жалпы жағдай"
+        },
+        {
+          "code": "unsure",
+          "label": "Сложно сказать",
+          "label_kz": "Айту қиын"
+        }
+      ],
+      "label_kz": "Не көбірек мазалайды?"
+    },
+    {
+      "id": "symptoms",
+      "legacy_ids": [
+        "B2"
+      ],
+      "block": "wellbeing",
+      "answer_type": "multi",
+      "label": "Есть ли что-то из этого прямо сейчас?",
+      "required": true,
+      "exclusive": [
+        "none",
+        "unsure"
+      ],
+      "options": [
+        {
+          "code": "chest_pain_severe",
+          "label": "Сильная боль в груди",
+          "label_kz": "Кеудедегі қатты ауырсыну"
+        },
+        {
+          "code": "breathing_severe",
+          "label": "Тяжело дышать",
+          "label_kz": "Тыныс алу қиын"
+        },
+        {
+          "code": "fainting_now",
+          "label": "Обморок, теряю сознание",
+          "label_kz": "Талу, есінен тану"
+        },
+        {
+          "code": "bleeding_uncontrolled",
+          "label": "Кровотечение не останавливается",
+          "label_kz": "Қан тоқтамайды"
+        },
+        {
+          "code": "other",
+          "label": "Другое",
+          "label_kz": "Басқа"
+        },
+        {
+          "code": "unsure",
+          "label": "Не уверен(а)",
+          "label_kz": "Сенімді емеспін"
+        },
+        {
+          "code": "none",
+          "label": "Ничего из этого",
+          "label_kz": "Ешқайсысы жоқ"
+        }
+      ],
+      "label_kz": "Дәл қазір осының бірі бар ма?"
+    },
+    {
+      "id": "conditions",
+      "legacy_ids": [
+        "C1"
+      ],
+      "block": "history",
+      "answer_type": "multi",
+      "label": "Есть ли у вас хронические заболевания?",
+      "required": true,
+      "exclusive": [
+        "none",
+        "unknown"
+      ],
+      "options": [
+        {
+          "code": "blood_pressure",
+          "label": "Повышенное давление",
+          "label_kz": "Жоғары қан қысымы"
+        },
+        {
+          "code": "heart",
+          "label": "Болезни сердца",
+          "label_kz": "Жүрек аурулары"
+        },
+        {
+          "code": "diabetes",
+          "label": "Диабет или высокий сахар",
+          "label_kz": "Диабет немесе жоғары қант"
+        },
+        {
+          "code": "thyroid",
+          "label": "Щитовидная железа",
+          "label_kz": "Қалқанша без"
+        },
+        {
+          "code": "lungs",
+          "label": "Астма или болезни лёгких",
+          "label_kz": "Демікпе немесе өкпе аурулары"
+        },
+        {
+          "code": "digestive",
+          "label": "Желудок или кишечник",
+          "label_kz": "Асқазан немесе ішек"
+        },
+        {
+          "code": "kidneys",
+          "label": "Почки",
+          "label_kz": "Бүйрек"
+        },
+        {
+          "code": "other",
+          "label": "Другое",
+          "label_kz": "Басқа"
+        },
+        {
+          "code": "unknown",
+          "label": "Не знаю",
+          "label_kz": "Білмеймін"
+        },
+        {
+          "code": "none",
+          "label": "Нет",
+          "label_kz": "Жоқ"
+        }
+      ],
+      "label_kz": "Созылмалы аурулар бар ма?"
+    },
+    {
+      "id": "medicines",
+      "legacy_ids": [
+        "C3"
+      ],
+      "block": "history",
+      "answer_type": "single",
+      "label": "Принимаете лекарства постоянно?",
+      "required": true,
+      "options": [
+        {
+          "code": "yes",
+          "label": "Да",
+          "label_kz": "Иә"
+        },
+        {
+          "code": "no",
+          "label": "Нет",
+          "label_kz": "Жоқ"
+        },
+        {
+          "code": "unknown",
+          "label": "Не уверен(а)",
+          "label_kz": "Сенімді емеспін"
+        }
+      ],
+      "label_kz": "Тұрақты дәрі қабылдайсыз ба?"
+    },
+    {
+      "id": "medicine_groups",
+      "legacy_ids": [
+        "C4"
+      ],
+      "block": "history",
+      "answer_type": "multi",
+      "label": "Какие лекарства?",
+      "show_if": {
+        "id": "medicines",
+        "eq": "yes"
+      },
+      "required_if": {
+        "id": "medicines",
+        "eq": "yes"
+      },
+      "exclusive": [
+        "unknown"
+      ],
+      "options": [
+        {
+          "code": "pressure",
+          "label": "От давления",
+          "label_kz": "Қысымға"
+        },
+        {
+          "code": "glucose",
+          "label": "От сахара",
+          "label_kz": "Қантқа"
+        },
+        {
+          "code": "cholesterol",
+          "label": "От холестерина",
+          "label_kz": "Холестеринге"
+        },
+        {
+          "code": "clotting",
+          "label": "Разжижают кровь",
+          "label_kz": "Қанды сұйылтатын"
+        },
+        {
+          "code": "hormones",
+          "label": "Гормоны",
+          "label_kz": "Гормондар"
+        },
+        {
+          "code": "other",
+          "label": "Другие",
+          "label_kz": "Басқалары"
+        },
+        {
+          "code": "unknown",
+          "label": "Не помню названия",
+          "label_kz": "Атауын ұмыттым"
+        }
+      ],
+      "label_kz": "Қандай дәрілер?"
+    },
+    {
+      "id": "family",
+      "legacy_ids": [
+        "D1"
+      ],
+      "block": "history",
+      "answer_type": "multi",
+      "label": "Чем болели близкие родственники?",
+      "required": true,
+      "exclusive": [
+        "none",
+        "unknown"
+      ],
+      "options": [
+        {
+          "code": "heart",
+          "label": "Сердце или давление",
+          "label_kz": "Жүрек немесе қысым"
+        },
+        {
+          "code": "diabetes",
+          "label": "Диабет",
+          "label_kz": "Диабет"
+        },
+        {
+          "code": "cancer",
+          "label": "Онкология",
+          "label_kz": "Онкология"
+        },
+        {
+          "code": "other",
+          "label": "Другое",
+          "label_kz": "Басқа"
+        },
+        {
+          "code": "unknown",
+          "label": "Не знаю",
+          "label_kz": "Білмеймін"
+        },
+        {
+          "code": "none",
+          "label": "Ничем серьёзным",
+          "label_kz": "Ауыр ештеңемен"
+        }
+      ],
+      "label_kz": "Жақын туыстарыңыз немен ауырған?"
+    },
+    {
+      "id": "tobacco",
+      "legacy_ids": [
+        "E1"
+      ],
+      "block": "history",
+      "answer_type": "single",
+      "label": "Вы курите?",
+      "required": true,
+      "options": [
+        {
+          "code": "never",
+          "label": "Никогда не курил(а)",
+          "label_kz": "Ешқашан шекпегенмін"
+        },
+        {
+          "code": "former_cigarettes",
+          "label": "Курил(а) раньше",
+          "label_kz": "Бұрын шеккенмін"
+        },
+        {
+          "code": "current_cigarettes",
+          "label": "Курю сигареты",
+          "label_kz": "Темекі шегемін"
+        },
+        {
+          "code": "vape",
+          "label": "Вейп или нагреваемый табак",
+          "label_kz": "Вейп немесе қыздырылатын темекі"
+        },
+        {
+          "code": "other_tobacco",
+          "label": "Другой табак",
+          "label_kz": "Басқа темекі"
+        },
+        {
+          "code": "declined",
+          "label": "Не хочу отвечать",
+          "label_kz": "Жауап бергім келмейді"
+        }
+      ],
+      "label_kz": "Темекі шегесіз бе?"
+    },
+    {
+      "id": "prior_results",
+      "legacy_ids": [
+        "B4"
+      ],
+      "block": "results",
+      "answer_type": "single",
+      "label": "Есть свежие анализы или обследования?",
+      "required": true,
+      "options": [
+        {
+          "code": "yes",
+          "label": "Да",
+          "label_kz": "Иә"
+        },
+        {
+          "code": "no",
+          "label": "Нет",
+          "label_kz": "Жоқ"
+        },
+        {
+          "code": "unknown",
+          "label": "Не помню",
+          "label_kz": "Есімде жоқ"
+        }
+      ],
+      "label_kz": "Жаңа талдаулар немесе тексерулер бар ма?"
+    },
+    {
+      "id": "result_types",
+      "block": "results",
+      "answer_type": "multi",
+      "label": "Какие именно?",
+      "show_if": {
+        "id": "prior_results",
+        "eq": "yes"
+      },
+      "required_if": {
+        "id": "prior_results",
+        "eq": "yes"
+      },
+      "options": [
+        {
+          "code": "labs",
+          "label": "Анализы",
+          "label_kz": "Талдаулар"
+        },
+        {
+          "code": "ultrasound",
+          "label": "УЗИ",
+          "label_kz": "УДЗ"
+        },
+        {
+          "code": "ct_mri",
+          "label": "КТ или МРТ",
+          "label_kz": "КТ немесе МРТ"
+        },
+        {
+          "code": "endoscopy",
+          "label": "Гастро- или колоноскопия",
+          "label_kz": "Гастро- немесе колоноскопия"
+        },
+        {
+          "code": "other",
+          "label": "Другое",
+          "label_kz": "Басқа"
+        },
+        {
+          "code": "date_unknown",
+          "label": "Не помню, когда делал(а)",
+          "label_kz": "Қашан жасағанымды ұмыттым"
+        }
+      ],
+      "label_kz": "Нақты қандай?"
+    }
+  ]
+}

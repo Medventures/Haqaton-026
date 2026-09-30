@@ -1,0 +1,82 @@
+[
+  {
+    "id": "task-05-prep-1",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "kind": "preparation",
+    "action": "Уточнить с врачом вопрос о регулярных лекарствах. Дозу не менять самостоятельно.",
+    "due_at": null,
+    "status": "active",
+    "source": {"template_id": "demo-prep-meds", "mode": "demo", "protocol_version": "demo-prep-v1"}
+  },
+  {
+    "id": "task-05-prep-2",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "kind": "preparation",
+    "action": "Взять документ, удостоверяющий личность, и список текущих жалоб.",
+    "due_at": "2026-10-08T18:00:00Z",
+    "status": "active",
+    "source": {"template_id": "demo-prep-documents", "mode": "demo", "protocol_version": "demo-prep-v1"}
+  },
+  {
+    "id": "task-05-prep-3",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "kind": "preparation",
+    "action": "Уточнить с врачом, нужна ли подготовка перед лабораторным исследованием. Срок и правила не выдумывать самостоятельно.",
+    "due_at": null,
+    "status": "active",
+    "source": {"template_id": "demo-prep-lab", "mode": "demo", "protocol_version": "demo-prep-v1", "procedure_code": "demo_lab"}
+  },
+  {
+    "id": "task-05-prep-4",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "kind": "preparation",
+    "action": "Подтвердить время прибытия в клинику с координатором.",
+    "due_at": "2026-10-08T12:00:00Z",
+    "status": "active",
+    "source": {"template_id": "demo-prep-arrival", "mode": "demo", "protocol_version": "demo-prep-v1"}
+  },
+  {
+    "id": "task-06-prep",
+    "case_id": "case-06",
+    "plan_id": "plan-06",
+    "kind": "preparation",
+    "action": "Уточнить с врачом вопрос о регулярных лекарствах. Дозу не менять самостоятельно.",
+    "due_at": null,
+    "status": "active",
+    "source": {"template_id": "demo-prep-meds", "mode": "demo"}
+  },
+  {
+    "id": "task-06-prep-2",
+    "case_id": "case-06",
+    "plan_id": "plan-06",
+    "kind": "preparation",
+    "action": "Сообщить координатору, если появятся новые жалобы до визита.",
+    "due_at": null,
+    "status": "active",
+    "source": {"template_id": "demo-prep-symptoms", "mode": "demo", "protocol_version": "demo-prep-v1"}
+  },
+  {
+    "id": "task-06-prep-3",
+    "case_id": "case-06",
+    "plan_id": "plan-06",
+    "kind": "preparation",
+    "action": "Уточнить с врачом подготовку к процедурам из плана. Не отменять лекарства самостоятельно.",
+    "due_at": null,
+    "status": "active",
+    "source": {"template_id": "demo-prep-ask-doctor", "mode": "demo", "protocol_version": "demo-prep-v1"}
+  },
+  {
+    "id": "task-08-follow",
+    "case_id": "case-08",
+    "plan_id": "plan-08",
+    "kind": "follow_up",
+    "action": "Повторный разбор по плану врача, срок уточнить",
+    "due_at": null,
+    "status": "active",
+    "source": {"report_id": "report-08", "span": "не выявлено", "mode": "demo"}
+  }
+]

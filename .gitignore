@@ -8,3 +8,12 @@ __pycache__/
 *.py[cod]
 .DS_Store
 Thumbs.db
+
+# Local planning documents and agent handoff
+/.agent/
+frontend/dist/
+.pytest_cache/
+*.tsbuildinfo
+data/demo.sqlite
+data/demo.sqlite-*
+data/*.sqlite

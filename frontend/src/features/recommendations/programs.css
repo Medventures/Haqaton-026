@@ -1,0 +1,12 @@
+/* Green Clinic — plan picker. Animations reuse gc-rise from patient.css;
+   this file scopes table row highlight transitions and reduced-motion safety. */
+
+.gc-plan-table tr {
+  transition: background-color 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gc-plan-table tr {
+    transition: none;
+  }
+}

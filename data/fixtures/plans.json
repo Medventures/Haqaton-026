@@ -1,0 +1,41 @@
+[
+  {
+    "id": "plan-05",
+    "case_id": "case-05",
+    "revision_id": "rev-05",
+    "author_doctor_id": "demo-doctor",
+    "template_id": "demo-plan-basic",
+    "source_refs": ["fixture:plans.json"],
+    "services": ["therapist_visit", "demo_lab", "demo_ultrasound"],
+    "status": "confirmed",
+    "approval_status": "unapproved",
+    "mode": "demo",
+    "approved_at": "2026-09-30T09:00:00Z"
+  },
+  {
+    "id": "plan-06",
+    "case_id": "case-06",
+    "revision_id": "rev-06",
+    "author_doctor_id": "demo-doctor",
+    "template_id": "demo-plan-basic",
+    "source_refs": ["fixture:plans.json"],
+    "services": ["therapist_visit", "demo_lab", "demo_result_consult"],
+    "status": "confirmed",
+    "approval_status": "unapproved",
+    "mode": "demo",
+    "approved_at": "2026-09-30T09:10:00Z"
+  },
+  {
+    "id": "plan-08",
+    "case_id": "case-08",
+    "revision_id": "rev-08",
+    "author_doctor_id": "demo-doctor",
+    "template_id": "demo-plan-basic",
+    "source_refs": ["fixture:plans.json"],
+    "services": ["therapist_visit"],
+    "status": "review_needed",
+    "approval_status": "unapproved",
+    "mode": "demo",
+    "approved_at": "2026-09-28T09:00:00Z"
+  }
+]

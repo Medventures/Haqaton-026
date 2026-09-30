@@ -1,0 +1,7 @@
+{
+  "id": "demo-therapist-01",
+  "display_name": "Врач-терапевт",
+  "timezone": "Asia/Almaty",
+  "is_demo": true,
+  "note": "Синтетический профиль для показа; не конкретный сотрудник PRIME"
+}

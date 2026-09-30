@@ -1,0 +1,62 @@
+[
+  {
+    "id": "route-05-1",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "procedure_code": "demo_lab",
+    "starts_at": "2026-10-09T04:00:00Z",
+    "ends_at": "2026-10-09T04:20:00Z",
+    "resource": "lab-demo",
+    "prerequisites": [],
+    "feasible": true,
+    "outcome": "scheduled"
+  },
+  {
+    "id": "route-05-2",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "procedure_code": "demo_ultrasound",
+    "starts_at": "2026-10-09T04:40:00Z",
+    "ends_at": "2026-10-09T05:10:00Z",
+    "resource": "us-demo",
+    "prerequisites": [],
+    "feasible": true,
+    "outcome": "scheduled"
+  },
+  {
+    "id": "route-05-3",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "procedure_code": "demo_ecg",
+    "starts_at": "2026-10-09T05:30:00Z",
+    "ends_at": "2026-10-09T05:45:00Z",
+    "resource": "ecg-demo",
+    "prerequisites": [],
+    "feasible": true,
+    "outcome": "scheduled"
+  },
+  {
+    "id": "route-05-4",
+    "case_id": "case-05",
+    "plan_id": "plan-05",
+    "procedure_code": "demo_final_consult",
+    "starts_at": "2026-10-13T05:00:00Z",
+    "ends_at": "2026-10-13T05:30:00Z",
+    "resource": "consult-demo",
+    "prerequisites": ["results_ready"],
+    "feasible": true,
+    "outcome": "scheduled_later"
+  },
+  {
+    "id": "route-06-1",
+    "case_id": "case-06",
+    "plan_id": "plan-06",
+    "procedure_code": "demo_lab",
+    "starts_at": null,
+    "ends_at": null,
+    "resource": null,
+    "prerequisites": ["prior_result_ready"],
+    "feasible": false,
+    "outcome": "Нельзя собрать день обследований: зависимая процедура требует результат, который не готов в доступном окне. Нужно действие координатора; фиктивное расписание не создаётся."
+  }
+]

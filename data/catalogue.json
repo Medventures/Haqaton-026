@@ -1,0 +1,7 @@
+{
+  "catalogue_version": "demo-catalogue-v1-retired",
+  "mode": "demo",
+  "approval_status": "unapproved",
+  "note": "Retired demo stubs. Live matcher reads data/catalogue.real.json (Prime Green Clinic pages).",
+  "packages": []
+}

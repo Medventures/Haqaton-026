@@ -1,0 +1,11 @@
+{
+  "rules_version": "demo-rules-v1",
+  "mode": "demo",
+  "approval_status": "unapproved",
+  "approved_by": null,
+  "adult_min_age": 18,
+  "age_max": 110,
+  "age_boundary_unresolved": [40],
+  "safety_stop_symptom_codes": ["chest_pain_severe", "breathing_severe", "fainting_now", "bleeding_uncontrolled"],
+  "note": "Демо-классификация workflow, не клинический протокол и не диагноз."
+}

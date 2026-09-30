@@ -1,0 +1,12 @@
+{
+  "name": "PRIME demo",
+  "timezone": "Asia/Almaty",
+  "is_demo": true,
+  "therapist_id": "demo-therapist-01",
+  "consent": {
+    "processing_text_version": "demo-processing-v1",
+    "transfer_text_version": "demo-transfer-v1",
+    "reminder_text_version": "demo-reminder-v1",
+    "processing_copy": "Ваши ответы нужны для предварительного подбора. При передаче в клинику доступ получают уполномоченные сотрудники в рамках своей роли."
+  }
+}

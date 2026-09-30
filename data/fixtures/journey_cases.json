@@ -1,0 +1,48 @@
+[
+  {
+    "case_id": "case-04",
+    "scenario": "awaiting_physician_plan",
+    "has_plan": false,
+    "notes": "Consultation done; doctor has not confirmed a demo physician plan. Route and preparation must 409 plan_not_approved."
+  },
+  {
+    "case_id": "case-05",
+    "scenario": "feasible_route",
+    "has_plan": true,
+    "route_outcome": "feasible",
+    "notes": "Confirmed demo plan plan-05. Route builds dated lab/imaging items; therapist appointment is not moved."
+  },
+  {
+    "case_id": "case-06",
+    "scenario": "impossible_route",
+    "has_plan": true,
+    "route_outcome": "impossible",
+    "notes": "Incompatible dependency: dependent procedure needs a result that is not ready in the available window. Return feasible=0 and outcome text; do not invent a schedule."
+  },
+  {
+    "case_id": "case-07",
+    "scenario": "results_no_follow_up",
+    "has_plan": false,
+    "follow_up_action": false,
+    "notes": "Partial numeric results pending doctor review. Fixture says no follow-up action — results-review creates none."
+  },
+  {
+    "case_id": "case-08",
+    "scenario": "reviewed_with_follow_up",
+    "has_plan": true,
+    "follow_up_action": true,
+    "follow_up_tasks": [
+      {
+        "action": "Повторный разбор по плану врача, срок уточнить",
+        "due_at": null,
+        "source": {"report_id": "report-08", "span": "не выявлено", "mode": "demo"}
+      },
+      {
+        "action": "Уточнить с врачом срок повторного визита по неясной формулировке",
+        "due_at": null,
+        "source": {"report_id": "report-08", "span": "не исключается", "mode": "demo"}
+      }
+    ],
+    "notes": "Reviewed demo conclusion with negated/uncertain/unknown assertions. At most 1–2 source-linked follow-up tasks; missing due dates stay null; repeat does not duplicate."
+  }
+]

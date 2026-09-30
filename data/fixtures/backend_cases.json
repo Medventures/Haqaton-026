@@ -1,0 +1,376 @@
+{
+  "patients": [
+    {
+      "id": "patient-01",
+      "display_name": "Айжан Сапарова",
+      "contact_name": "Айжан Сапарова",
+      "phone": "+77000000001",
+      "language": "ru",
+      "owner_token": "owner-patient-01"
+    },
+    {
+      "id": "patient-02",
+      "display_name": "Ерлан Жумабаев",
+      "contact_name": "Ерлан Жумабаев",
+      "phone": "+77000000002",
+      "language": "ru",
+      "owner_token": "owner-patient-02"
+    },
+    {
+      "id": "patient-03",
+      "display_name": "Динара Ахметова",
+      "contact_name": "Динара Ахметова",
+      "phone": "+77000000003",
+      "language": "ru",
+      "owner_token": "owner-patient-03"
+    },
+    {
+      "id": "patient-04",
+      "display_name": "Марат Искаков",
+      "contact_name": "Марат Искаков",
+      "phone": "+77000000004",
+      "language": "ru",
+      "owner_token": "owner-patient-04"
+    },
+    {
+      "id": "patient-05",
+      "display_name": "Алия Нурланова",
+      "contact_name": "Алия Нурланова",
+      "phone": "+77000000005",
+      "language": "ru",
+      "owner_token": "owner-patient-05"
+    },
+    {
+      "id": "patient-06",
+      "display_name": "Нурсултан Бекенов",
+      "contact_name": "Нурсултан Бекенов",
+      "phone": "+77000000006",
+      "language": "kk",
+      "owner_token": "owner-patient-06"
+    },
+    {
+      "id": "patient-07",
+      "display_name": "Жанна Касымова",
+      "contact_name": "Жанна Касымова",
+      "phone": "+77000000007",
+      "language": "ru",
+      "owner_token": "owner-patient-07"
+    },
+    {
+      "id": "patient-08",
+      "display_name": "Серик Омаров",
+      "contact_name": "Серик Омаров",
+      "phone": "+77000000008",
+      "language": "ru",
+      "owner_token": "owner-patient-08"
+    }
+  ],
+  "cases": [
+    {
+      "id": "case-01",
+      "patient_id": "patient-01",
+      "stage": "questionnaire_saved",
+      "current_revision_id": "rev-01",
+      "preferred_date": "2026-10-15"
+    },
+    {
+      "id": "case-02",
+      "patient_id": "patient-02",
+      "stage": "package_selected",
+      "current_revision_id": "rev-02",
+      "selected_program_id": "demo-discuss",
+      "consultation_reason": "discuss_preliminary_programme",
+      "preferred_date": "2026-10-20"
+    },
+    {
+      "id": "case-03",
+      "patient_id": "patient-03",
+      "stage": "therapist_booking_confirmed",
+      "current_revision_id": "rev-03",
+      "selected_program_id": "demo-prevention-a",
+      "consultation_reason": "check_programme",
+      "preferred_date": "2026-10-08"
+    },
+    {
+      "id": "case-04",
+      "patient_id": "patient-04",
+      "stage": "consultation_completed",
+      "current_revision_id": "rev-04",
+      "selected_program_id": "demo-discuss",
+      "preferred_date": "2026-10-06"
+    },
+    {
+      "id": "case-05",
+      "patient_id": "patient-05",
+      "stage": "physician_plan_confirmed",
+      "current_revision_id": "rev-05",
+      "selected_program_id": "demo-prevention-a",
+      "preferred_date": "2026-10-09"
+    },
+    {
+      "id": "case-06",
+      "patient_id": "patient-06",
+      "stage": "preparation_in_progress",
+      "current_revision_id": "rev-06",
+      "selected_program_id": "demo-prevention-b",
+      "preferred_date": "2026-10-10"
+    },
+    {
+      "id": "case-07",
+      "patient_id": "patient-07",
+      "stage": "results_available",
+      "current_revision_id": "rev-07",
+      "selected_program_id": "demo-prevention-a",
+      "preferred_date": "2026-10-03"
+    },
+    {
+      "id": "case-08",
+      "patient_id": "patient-08",
+      "stage": "follow_up_planned",
+      "current_revision_id": "rev-08",
+      "selected_program_id": "demo-discuss",
+      "preferred_date": "2026-10-01"
+    }
+  ],
+  "revisions": [
+    {
+      "id": "rev-01",
+      "case_id": "case-01",
+      "kind": "intake",
+      "answers": {
+        "age_years": 35,
+        "visit_reason": "prevention"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-02",
+      "case_id": "case-02",
+      "kind": "intake",
+      "answers": {
+        "age_years": 40,
+        "visit_reason": "complaints"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-03",
+      "case_id": "case-03",
+      "kind": "intake",
+      "answers": {
+        "age_years": 44,
+        "visit_reason": "prevention"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-04",
+      "case_id": "case-04",
+      "kind": "intake",
+      "answers": {
+        "age_years": 52,
+        "visit_reason": "follow_up"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-05",
+      "case_id": "case-05",
+      "kind": "intake",
+      "answers": {
+        "age_years": 38,
+        "visit_reason": "prevention"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-06",
+      "case_id": "case-06",
+      "kind": "intake",
+      "answers": {
+        "age_years": 29,
+        "visit_reason": "employer"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-07",
+      "case_id": "case-07",
+      "kind": "intake",
+      "answers": {
+        "age_years": 47,
+        "visit_reason": "prevention"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": null
+    },
+    {
+      "id": "rev-08",
+      "case_id": "case-08",
+      "kind": "intake",
+      "answers": {
+        "age_years": 61,
+        "visit_reason": "follow_up"
+      },
+      "active_fields": [
+        "age_years",
+        "visit_reason"
+      ],
+      "doctor_note": "Demo note"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "appt-03",
+      "case_id": "case-03",
+      "slot_id": "demo-slot-1006-1000",
+      "status": "demo_confirmed",
+      "consultation_reason": "check_programme",
+      "revision_id": "rev-03",
+      "idempotency_key": "seed-appt-03",
+      "payload_fingerprint": "seed",
+      "confirmed_at": "2026-09-30T08:00:00Z"
+    }
+  ],
+  "consents": [
+    {
+      "case_id": "case-01",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-01"
+    },
+    {
+      "case_id": "case-01",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-01"
+    },
+    {
+      "case_id": "case-02",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-02"
+    },
+    {
+      "case_id": "case-02",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-02"
+    },
+    {
+      "case_id": "case-03",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-03"
+    },
+    {
+      "case_id": "case-03",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-03"
+    },
+    {
+      "case_id": "case-04",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-04"
+    },
+    {
+      "case_id": "case-04",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-04"
+    },
+    {
+      "case_id": "case-05",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-05"
+    },
+    {
+      "case_id": "case-05",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-05"
+    },
+    {
+      "case_id": "case-06",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-06"
+    },
+    {
+      "case_id": "case-06",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-06"
+    },
+    {
+      "case_id": "case-07",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-07"
+    },
+    {
+      "case_id": "case-07",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-07"
+    },
+    {
+      "case_id": "case-08",
+      "scope": "processing",
+      "text_version": "demo-processing-v1",
+      "granted": true,
+      "actor": "patient-08"
+    },
+    {
+      "case_id": "case-08",
+      "scope": "clinic_transfer",
+      "text_version": "demo-transfer-v1",
+      "granted": true,
+      "actor": "patient-08"
+    }
+  ]
+}
