@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, ChevronDown, Info, Minus, Plus, Sparkles } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Info, Plus, Sparkles } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { api } from "@/api/client";
 import type { ComparisonRow, Offer, OfferTier, QuestionnaireConfig, TierGroup } from "@/api/types";
@@ -29,6 +29,8 @@ const COPY = {
     book: "Записаться к терапевту",
     discuss: "Обсудить с терапевтом",
     why: "Почему так",
+    whyShow: "Почему мы так предлагаем",
+    whyHide: "Скрыть пояснения",
     included: "Что входит",
     detailsMore: "Подробнее о составе",
     detailsLess: "Свернуть состав",
@@ -58,6 +60,8 @@ const COPY = {
     book: "Терапевтке жазылу",
     discuss: "Терапевтпен талқылау",
     why: "Неге олай",
+    whyShow: "Неліктен осылай ұсынамыз",
+    whyHide: "Түсіндірмені жасыру",
     included: "Не кіреді",
     detailsMore: "Құрамы туралы толығырақ",
     detailsLess: "Құрамын жасыру",
@@ -118,6 +122,7 @@ export function ProgramsPage() {
   const [config, setConfig] = useState<QuestionnaireConfig | null>(null);
   const [sexTab, setSexTab] = useState<"female" | "male">("female");
   const [activeExplanation, setActiveExplanation] = useState<string | null>(null);
+  const [showWhy, setShowWhy] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -154,13 +159,6 @@ export function ProgramsPage() {
     () => consideredChips(config, submission?.answers, explanationTitles, lang),
     [config, submission, explanationTitles, lang],
   );
-
-  // Blocks highlighted by the hovered/focused explanation → soft green rows in the table.
-  const highlightBlocks = useMemo(() => {
-    if (!offer) return new Set<string>();
-    const ex = offer.explanations.find((e) => e.id === activeExplanation);
-    return new Set(ex?.blocks ?? []);
-  }, [offer, activeExplanation]);
 
   if (!preview) {
     return (
@@ -309,9 +307,24 @@ export function ProgramsPage() {
 
         {/* Почему так */}
         {offer.explanations.length ? (
-          <section className="gc-rise gc-d3 grid gap-4">
-            <h2 className="text-[22px] font-bold tracking-[-0.02em] text-[#10261E]">{copy.why}</h2>
-            <div className="grid gap-3 sm:grid-cols-2">
+          <section className="gc-rise gc-d3 grid justify-items-center gap-4">
+            <button
+              type="button"
+              aria-expanded={showWhy}
+              onClick={() => setShowWhy((v) => !v)}
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-[#03392D]/12 bg-white/80 px-5 text-[15px] font-semibold text-[#03392D] backdrop-blur-xl transition active:scale-[0.98] hover:bg-white"
+            >
+              <Info className="h-[18px] w-[18px]" aria-hidden />
+              {showWhy ? copy.whyHide : copy.whyShow}
+              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${showWhy ? "rotate-180" : ""}`} aria-hidden />
+            </button>
+            <div
+              className={`grid w-full transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(.32,.72,0,1)] ${
+                showWhy ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+            <div className="min-h-0 overflow-hidden">
+            <div className="grid gap-3 pt-1 sm:grid-cols-2">
               {offer.explanations.map((ex) => {
                 const rows = group.comparison.filter((r) => ex.blocks.includes(r.block_id));
                 return (
@@ -353,53 +366,10 @@ export function ProgramsPage() {
                 );
               })}
             </div>
+            </div>
+            </div>
           </section>
         ) : null}
-
-        {/* Что входит — comparison table */}
-        <section className="gc-rise gc-d3 grid gap-4">
-          <h2 className="text-[22px] font-bold tracking-[-0.02em] text-[#10261E]">{copy.included}</h2>
-          <div className={`${glass} overflow-hidden rounded-3xl`}>
-            <table className="w-full border-collapse text-left text-[15px]">
-              <thead>
-                <tr className="border-b border-[#03392D]/10 text-[13px] font-semibold uppercase tracking-[0.04em] text-[#03392D]/60">
-                  <th className="px-4 py-3 md:px-5">&nbsp;</th>
-                  <th className="px-3 py-3 text-center">{copy.optimal}</th>
-                  <th className="px-3 py-3 text-center">{copy.maximum}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {group.comparison.map((row) => {
-                  const hot = highlightBlocks.has(row.block_id);
-                  return (
-                    <tr
-                      key={row.block_id}
-                      className={`border-b border-[#03392D]/[0.06] last:border-0 transition-colors ${
-                        hot ? "bg-[#8BC53F]/12" : ""
-                      }`}
-                    >
-                      <td className="px-4 py-3 font-medium text-[#18342A] md:px-5">{labelOf(row, lang)}</td>
-                      <td className="px-3 py-3 text-center">
-                        {row.optimal ? (
-                          <Check className="mx-auto h-5 w-5 text-[#03392D]" aria-label="✓" />
-                        ) : (
-                          <Minus className="mx-auto h-4 w-4 text-[#b7c7c0]" aria-label="—" />
-                        )}
-                      </td>
-                      <td className="px-3 py-3 text-center">
-                        {row.maximum ? (
-                          <Check className="mx-auto h-5 w-5 text-[#03392D]" aria-label="✓" />
-                        ) : (
-                          <Minus className="mx-auto h-4 w-4 text-[#b7c7c0]" aria-label="—" />
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </section>
 
         <p className="text-center text-[13px] text-[#52655B]">{copy.disclaimer}</p>
       </main>

@@ -28,8 +28,7 @@ body {
 
 .welcome-wash {
   background: linear-gradient(120deg, #f6faf7 0%, #dcefe6 30%, #f8fbf9 58%, #cfe6da 100%);
-  background-size: 220% 220%;
-  animation: welcome-wash 16s ease-in-out infinite;
+  /* Static base: motion comes from GPU-composited aurora layers (no full-screen repaint). */
 }
 
 @keyframes welcome-wash {

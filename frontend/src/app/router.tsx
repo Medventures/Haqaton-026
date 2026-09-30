@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { bootstrapPatientSession } from "@/app/patientSession";
 import { LoginSheet } from "@/components/patient/LoginSheet";
@@ -9,11 +9,17 @@ import { OverviewPage } from "@/features/overview/OverviewPage";
 import { HomePage } from "@/features/patient-home/HomePage";
 import { applyDocumentLang, getWelcomeProfile } from "@/features/patient-home/welcome";
 import { ProgramsPage } from "@/features/recommendations/ProgramsPage";
-import { StaffCasePage } from "@/features/staff/StaffCasePage";
-import { StaffListPage } from "@/features/staff/StaffListPage";
-import { StaffFunnelPage } from "@/features/staff/StaffFunnelPage";
-import { StaffSchedulePage } from "@/features/staff/StaffSchedulePage";
 import "@/components/patient/patient.css";
+
+// Clinic workspace is loaded on demand: patients never download the dashboard code.
+const StaffListPage = lazy(() => import("@/features/staff/StaffListPage").then((m) => ({ default: m.StaffListPage })));
+const StaffCasePage = lazy(() => import("@/features/staff/StaffCasePage").then((m) => ({ default: m.StaffCasePage })));
+const StaffSchedulePage = lazy(() => import("@/features/staff/StaffSchedulePage").then((m) => ({ default: m.StaffSchedulePage })));
+const StaffFunnelPage = lazy(() => import("@/features/staff/StaffFunnelPage").then((m) => ({ default: m.StaffFunnelPage })));
+
+function StaffFallback() {
+  return <div className="min-h-[100dvh] bg-[#0F1412]" aria-busy="true" />;
+}
 
 export function AppRouter() {
   useEffect(() => {
@@ -24,6 +30,7 @@ export function AppRouter() {
   return (
     <div>
       <main>
+        <Suspense fallback={<StaffFallback />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/intake" element={<IntakePage />} />
@@ -38,6 +45,7 @@ export function AppRouter() {
           <Route path="/staff/schedule" element={<StaffSchedulePage />} />
           <Route path="/staff/funnel" element={<StaffFunnelPage />} />
         </Routes>
+        </Suspense>
       </main>
       <LoginSheet />
     </div>

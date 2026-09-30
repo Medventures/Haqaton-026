@@ -96,10 +96,16 @@
 .gc-aurora {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(80px);
+  /* Radial gradients are already soft: a small blur is enough and far cheaper than 80px + blend. */
+  filter: blur(24px);
   opacity: 0.75;
   will-change: transform;
-  mix-blend-mode: multiply;
+  transform: translateZ(0);
+  contain: strict;
+}
+@media (max-width: 767px) {
+  .gc-aurora { filter: none; }
+  .gc-aurora-c, .gc-aurora-d { display: none; }
 }
 .gc-aurora-a {
   width: 62vmax; height: 62vmax; left: -18vmax; top: -22vmax;
