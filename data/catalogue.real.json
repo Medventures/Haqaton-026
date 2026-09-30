@@ -15,7 +15,7 @@
       ],
       "composition_status": "partial",
       "approval_status": "unapproved",
-      "price_minor": null,
+      "price_minor": 302740,
       "currency": "KZT",
       "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/zhenskiy-bazovyy-chekap-do-40-let/",
       "blocks": [
@@ -83,7 +83,7 @@
       ],
       "composition_status": "partial",
       "approval_status": "unapproved",
-      "price_minor": null,
+      "price_minor": 292220,
       "currency": "KZT",
       "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/muzhskoy-bazovyy-check-up-do-40-let/",
       "blocks": [
@@ -151,7 +151,7 @@
       ],
       "composition_status": "partial",
       "approval_status": "unapproved",
-      "price_minor": null,
+      "price_minor": 338000,
       "currency": "KZT",
       "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-zhenskiy-rasshirennyy-paket-posle-40-let/",
       "blocks": [
@@ -226,7 +226,7 @@
       ],
       "missing_positions": [],
       "unknown_positions": [],
-      "price_old_minor": null
+      "price_old_minor": 398000
     },
     {
       "package_id": "m-extended-40p",
@@ -237,7 +237,7 @@
       ],
       "composition_status": "partial",
       "approval_status": "unapproved",
-      "price_minor": null,
+      "price_minor": 327000,
       "currency": "KZT",
       "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/check-up-muzhskoy-rasshirennyy-posle-40-let/",
       "blocks": [
@@ -300,7 +300,7 @@
       ],
       "missing_positions": [],
       "unknown_positions": [],
-      "price_old_minor": null
+      "price_old_minor": 385000
     },
     {
       "package_id": "kids-1-17",
@@ -313,7 +313,7 @@
       ],
       "composition_status": "partial",
       "approval_status": "unapproved",
-      "price_minor": null,
+      "price_minor": 121240,
       "currency": "KZT",
       "source_url": "https://primegc.kz/%D0%A1%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D1%8B/mini-check-up-paket-detskiy-1-17-let/",
       "blocks": [
@@ -357,5 +357,5 @@
       "price_old_minor": null
     }
   ],
-  "price_note": "На primegc.kz цены не опубликованы (проверено 2026-09-30). Заполнить price_minor из прейскуранта клиники; price_old_minor — только при реальной акции клиники."
+  "price_note": "Цены для демо взяты с greenclinic.kz (2026-09-30): Мужской Базовый 292 220, Женский Базовый 302 740, Мужской ОНКО 327 000, Детский Базовый 121 240. Женский расширенный — оценка. Старая цена у расширенных — демо-акция. Заменить прейскурантом PRIME."
 }

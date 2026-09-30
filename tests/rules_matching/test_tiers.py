@@ -76,7 +76,8 @@ def test_offer_under_40_optimal_basic_maximum_extended(client, matching_fixtures
     assert set(g["maximum"]["extra_block_ids"]) == {"oncology_markers", "mammography", "ultrasound"}
     assert offer["recommended"] == "optimal"
     assert offer["cta"] == "book"
-    assert g["optimal"]["price_minor"] is None and g["maximum"]["price_minor"] is None
+    assert g["optimal"]["price_minor"] == 302740 and g["maximum"]["price_minor"] == 338000
+    assert g["maximum"]["price_old_minor"] > g["maximum"]["price_minor"] and g["optimal"]["price_old_minor"] is None
     rows = {r["block_id"]: r for r in g["comparison"]}
     assert rows["mammography"]["optimal"] is False and rows["mammography"]["maximum"] is True
     assert "plain_checkup" in offer["factors"]

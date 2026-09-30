@@ -105,7 +105,7 @@ def test_persona(client, pid, patch, n_visible, workflow, pair, recommended, cta
         assert (g["optimal"]["package_id"], g["maximum"]["package_id"]) == pair
         assert offer["recommended"] == recommended
         assert offer["cta"] == cta
-        assert all(t["price_minor"] is None for grp in offer["groups"] for t in (grp["optimal"], grp["maximum"]))
+        assert all(t["price_minor"] > 0 for grp in offer["groups"] for t in (grp["optimal"], grp["maximum"]))
     if factor:
         assert factor in [e["id"] for e in p["explanations"]] or (offer and factor in offer["factors"])
 

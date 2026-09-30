@@ -47,7 +47,7 @@ def test_age_boundaries_parametrized(client: TestClient, matching_fixtures: dict
             assert payload["candidates"] == []
         else:
             assert payload["candidates"]
-            assert all(c["price_minor"] is None for c in payload["candidates"])
+            assert all(isinstance(c["price_minor"], int) and c["price_minor"] > 0 for c in payload["candidates"])
             ids = {c["package_id"] for c in payload["candidates"]}
             assert not ids & {"demo-discuss", "demo-prevention-a", "demo-prevention-b"}
             if age == 39:
@@ -150,8 +150,8 @@ def test_empty_needs_do_not_claim_full_coverage(client: TestClient, matching_fix
         codes = [r["code"] for r in candidate["reasons"]]
         assert "empty_needs" in codes
         assert "needs_unverified" in candidate["review_flags"]
-        # No invented score: price stays null; reasons carry empty_needs, not a 100% claim.
-        assert candidate["price_minor"] is None
+        # No invented score: reasons carry empty_needs, not a 100% claim; price comes from catalogue.
+        assert candidate["price_minor"] == 302740
 
 
 def test_unknown_vs_no_pregnancy_and_medicines(client: TestClient, matching_fixtures: dict):
@@ -244,7 +244,7 @@ def test_anonymous_preview_does_not_increase_patient_count(client: TestClient, m
     assert cases_after == cases_before
 
 
-def test_null_price_stays_null(client: TestClient, matching_fixtures: dict):
+def test_price_comes_from_catalogue(client: TestClient, matching_fixtures: dict):
     response = client.post(
         "/api/preview",
         json=submission(matching_fixtures["baseline_clean_male"], "price-null"),
@@ -253,8 +253,8 @@ def test_null_price_stays_null(client: TestClient, matching_fixtures: dict):
     candidates = response.json()["candidates"]
     assert candidates
     for candidate in candidates:
-        assert candidate["price_minor"] is None
-        assert candidate["price_minor"] != 0
+        assert candidate["price_minor"] == 292220
+        assert candidate["currency"] == "KZT"
         assert candidate["composition_status"] == "incomplete"  # partial mapped for contract
 
 
